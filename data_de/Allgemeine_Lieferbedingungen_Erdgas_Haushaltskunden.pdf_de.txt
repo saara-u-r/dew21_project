@@ -1,0 +1,905 @@
+Allgemeine Lieferbedingungen Erdgas
+der Dortmunder Energie- und Wasserversorgung GmbH (DEW21) für Haushaltskunden
+Stand: Februar 2023
+
+Die nachfolgenden Allgemeinen Lieferbedingungen (ALB) gelten nur für die Belieferung mit Erdgas von Haushaltskunden
+außerhalb der Grund- und Ersatzversorgung, die einen Liefervertrag mit DEW21 abgeschlossen haben. Haushaltskunden sind
+Letztverbraucher, die Energie überwiegend für den Eigenverbrauch im Haushalt oder für den einen Jahresverbrauch von 10.000
+Kilowattstunden nicht übersteigenden Eigenverbrauch für berufliche, landwirtschaftliche oder gewerbliche Zwecke kaufen. Er-
+gänzend und vorrangig hierzu gelten zusätzliche Besondere Bedingungen (z. B. für Online-Tarife), falls diese Bestandteil des
+Liefervertrags sind.
+
+1. Vertragsschluss und Lieferbeginn
+
+1.1 Das Angebot durch DEW21 in Prospekten, Anzeigen, Formularen etc. ist frei-
+bleibend. Maßgeblich sind die bei Vertragsschluss vereinbarten Preise.
+
+1.2 DEW21 wird den Lieferantenwechsel zügig und unentgeltlich unter Beach-
+tung der jeweilig vertraglich vereinbarten Fristen durchführen. Nach dem Wech-
+sel ist der vormalige Lieferant verpflichtet, dem neuen Lieferanten den für ihn
+maßgeblichen Verbrauch des vergleichbaren Vorjahreszeitraums mitzuteilen.
+Soweit der vormalige Lieferant aus Gründen, die er nicht zu vertreten hat, den
+Verbrauch nicht ermitteln kann, ist der geschätzte Verbrauch anzugeben.
+
+1.3 DEW21 ist bemüht, den gewünschten Lieferbeginn des Auftraggebers zu re-
+alisieren. Der Vertrag kommt durch Bestätigung von DEW21 in Textform unter
+Angabe des voraussichtlichen Lieferbeginns zustande. Bei einem Lieferanten-
+wechsel hängt der tatsächliche Lieferbeginn davon ab, dass alle für die Beliefe-
+rung notwendigen Maßnahmen (Kündigung des bisherigen Liefervertrages, Frei-
+gabe durch den Vorlieferanten etc.) erfolgt sind. Eine Belieferung erfolgt nicht
+vor Ablauf der Widerrufsfrist des Kunden gemäß §§ 355 Abs. 2, 356 Abs. 2 Nr. 2
+Bürgerliches Gesetzbuch (BGB), es sei denn, der Kunde fordert DEW21 hierzu
+ausdrücklich auf.
+
+2. Art der Lieferung
+
+2.1 DEW21 liefert dem Kunden dessen gesamten Bedarf an Erdgas an seine ver-
+traglich benannte Entnahmestelle.
+
+2.2 Entnahmestelle ist die Eigentumsgrenze des Netzanschlusses, über den der
+Kunde beliefert und mittels Marktlokations-ID energiewirtschaftlich identifiziert
+wird. Als Messlokation wird der Ort bezeichnet, an der Energie gemessen wird
+und die alle technischen Einrichtungen beinhaltet, die zur Ermittlung und ggf.
+Übermittlung der Messwerte erforderlich sind.
+
+2.3 Soweit in Besonderen Bedingungen nichts Abweichendes vereinbart ist, wer-
+den nur Kunden mit Erdgasbedarf für Standardlastprofile und in Niederdruck zu
+den Bedingungen dieses Vertrages beliefert.
+Das Erdgas, dessen Brennwert in Folge von Erzeugungs- oder Bezugsverhältnis-
+sen Schwankungsbreiten unterliegt, wird vom Betreiber des örtlichen Verteiler-
+netzes (Netzbetreiber) (siehe Ziff. 12) aus dem Niederdrucknetz zur Verfügung
+gestellt. Maßgeblich hierfür sind die „Verordnung über Allgemeine Bedingungen
+für den Netzanschluss und dessen Nutzung für die Gasversorgung in Nieder-
+druck (Niederdruckanschlussverordnung – NDAV)“ und die jeweiligen Ergänzen-
+den Bedingungen des örtlichen Netzbetreibers.
+
+2.4 Gaszähler geben den Verbrauch in Kubikmetern (m³) an. Zur Bestimmung der
+für die Abrechnung maßgeblichen Energiemenge in Kilowattstunden (kWh) wird
+dieser Verbrauch nach Maßgabe des DVGW-Arbeitsblattes G685 „Gasabrech-
+nung“ mit dem vom Netzbetreiber angegebenen Umrechnungsfaktor in kWh/m³
+multipliziert. Dieser Faktor wird aus der Zustandszahl (Z) und dem für die Liefer-
+stelle maßgeblichen mittleren Brennwert (Hs) ermittelt. Ändern sich während
+des Abrechnungszeitraums die unter Ziff. 9 genannten Preisbestandteile, so
+zieht DEW21 zur thermischen Aufteilung des Jahresverbrauchs die tempera-
+turabhängige Kenngröße „Gradtagszahlen“ heran.
+
+3. Kosten, Gebühren und Pauschalen
+
+Die Höhe der nachfolgend genannten Kosten, Gebühren und Pauschalen (z. B.
+Mahngebühren, Sperr- und Wiederanschlusskosten) zum Zeitpunkt des Ver-
+tragsschlusses ergibt sich aus der dem Kunden bei Abschluss zur Kenntnis ge-
+gebenen Kostenübersicht. Die jeweils aktuelle Höhe kann zudem auf der Inter-
+netseite von DEW21 (www.dew21.de) abgerufen werden.
+
+4. Bonitätsprüfung
+
+DEW21 kann gemäß Ziff. 22.4 e) zur Bonitätsprüfung bei der SCHUFA HOLDING
+AG, Kormoranweg 5, 65201 Wiesbaden oder der Creditreform Dortmund Scharf
+GmbH & Co. KG, Phoenixseestr. 4, 44263 Dortmund, eine Auskunft einholen. Bei
+der Erteilung von Auskünften kann die SCHUFA ihren Vertragspartnern ergän-
+zend einen aus ihrem Datenbestand errechneten Wahrscheinlichkeitswert zur
+Beurteilung des Kreditrisikos mitteilen (Score-Verfahren).
+Im Falle nicht vertragsgemäßen Verhaltens (z. B. Forderungsbetrag bei titulierter
+Forderung) übermittelt DEW21 diese Informationen an die SCHUFA, die bei
+Nachweis des berechtigten Interesses hierüber Auskunft an ihre Vertragspartner
+erteilt.
+Vertragspartner der SCHUFA sind vor allem Kreditinstitute sowie Kreditkarten-
+und Leasinggesellschaften. Daneben erteilt die SCHUFA auch Auskünfte an Han-
+dels-, Telekommunikations- und sonstige Unternehmen, die Leistungen und Lie-
+ferungen gegen Kredit gewähren. Weitere Informationen zur SCHUFA:
+www.meineschufa.de.
+
+5. Umfang und Durchführung der Lieferung
+
+5.1 Der Messstellenbetrieb wird durch den Messstellenbetreiber erbracht und ist
+gemäß § 9 Abs. 2 MsbG Bestandteil dieses Vertrages, soweit der Kunde keinen
+Vertrag mit einem wettbewerblichen Messstellenbetreiber schließt. DEW21 stellt
+dem Kunden das Entgelt für den Messstellenbetrieb und Messung unter den Vor-
+aussetzungen von Ziff. 9.4 in Rechnung.
+
+5.2 DEW21 ist weiter von ihrer Leistungspflicht befreit, soweit und solange der
+Netzbetreiber den Netzanschluss und/oder die Anschlussnutzung bzw. der
+Messstellenbetreiber den Messstellenbetrieb auf eigene Initiative unterbrochen
+hat. Das gleiche gilt, wenn DEW21 an der Lieferung und/oder dem Bezug von
+Erdgas aufgrund höherer Gewalt oder sonstiger Umstände, deren Beseitigung
+DEW21 nicht möglich ist oder wirtschaftlich nicht zugemutet werden kann, ge-
+hindert ist. Schadensersatzansprüche des Kunden gegen DEW21 bleiben für den
+Fall unberührt, dass DEW21 an der Unterbrechung ein Verschulden trifft.
+
+6. Abschlagszahlungen
+
+6.1 DEW21 kann vom Kunden monatliche Abschlagszahlungen verlangen. Der
+Abschlagsbetrag ist anteilig für den Zeitraum der Abschlagszahlung entspre-
+chend dem Verbrauch im zuletzt abgerechneten Zeitraum zu berechnen. Ist eine
+solche Berechnung nicht möglich, so bemisst sich die Abschlagszahlung nach
+dem durchschnittlichen Verbrauch vergleichbarer Kunden. Macht der Kunde
+glaubhaft, dass sein Verbrauch erheblich abweicht, so ist dies angemessen zu
+berücksichtigen.
+
+6.2 Zum Ende jedes von DEW21 festgelegten Abrechnungszeitraumes von ei-
+nem Jahr und zum Ende des Lieferverhältnisses wird von DEW21 eine Abrech-
+nung erstellt, in welcher der tatsächliche Umfang der Belieferung unter Anrech-
+nung der Abschlagszahlungen abgerechnet wird. Ergibt sich eine Abweichung
+der Abschlagszahlungen von der Abrechnung der tatsächlichen Belieferung, so
+wird der zu viel oder zu wenig berechnete Betrag unverzüglich erstattet bzw.
+nachentrichtet, spätestens aber mit der nächsten Abschlagszahlung verrechnet.
+Der Kunde hat – abweichend von Satz 1 – das Recht, eine kostenpflichtige mo-
+natliche, vierteljährliche oder halbjährliche Abrechnung zu wählen, die auf Grund-
+lage einer gesonderten Vereinbarung mit DEW21 erfolgt. Bei einer monatlichen
+Abrechnung entfällt das Recht von DEW21 nach Ziff. 6.1.
+
+6.3 Ändern sich die Preise während des Abrechnungszeitraums, so rechnet
+DEW21 geänderte verbrauchsunabhängige Preisbestandteile tagesgenau ab.
+Für die Abrechnung geänderter verbrauchsabhängiger Preisbestandteile wird die
+ermittelte Verbrauchsmenge des Kunden im Abrechnungszeitraum auf Grundla-
+ge einer Schätzung nach billigem Ermessen (§ 315 BGB) auf den Zeitraum vor
+und nach der Preisänderung aufgeteilt, wobei jahreszeitliche Verbrauchsschwan-
+kungen auf der Grundlage vergleichbarer Erfahrungswerte angemessen zu be-
+rücksichtigen sind. Die nach der Preisänderung anfallenden Abschlagszahlun-
+gen können entsprechend angepasst werden.
+
+6.4 Ergibt sich bei der Abrechnung, dass zu hohe Abschlagszahlungen verlangt
+wurden, so ist der übersteigende Betrag unverzüglich zu erstatten, spätestens
+aber mit der nächsten Abschlagsforderung zu verrechnen. Nach Beendigung des
+Versorgungsverhältnisses sind zu viel gezahlte Abschläge unverzüglich zu er-
+statten.
+
+7. Abrechnung, Fälligkeit, Verzug und Unterbrechung der Versorgung wegen
+Zahlungsverzuges
+
+7.1 Der Erdgasverbrauch wird in der Regel alle 12 Monate erfasst und abgerech-
+net, soweit nicht vorzeitig eine Zwischen- oder Endabrechnung erstellt wird. Der
+Kunde kann seine fälligen Zahlungen wahlweise entweder durch SEPA-Last-
+schrift oder durch Banküberweisung leisten.
+
+7.2 Der Erdgasverbrauch wird in der Regel alle 12 Monate erfasst und abgerech-
+net, soweit nicht vorzeitig eine Zwischen- oder Endabrechnung erstellt wird. Der
+Kunde kann seine fälligen Zahlungen wahlweise entweder durch SEPA-Last-
+schrift oder durch Banküberweisung leisten.
+
+7.3 Die Fälligkeit der Abschlagszahlungen wird dem Kunden mit dem Lieferver-
+trag bzw. der Vertragsbestätigung sowie mit der Jahresrechnung mitgeteilt.
+
+7.4 Sämtliche Rechnungsbeträge werden zu dem von DEW21 angegebenen Zeit-
+punkt, frühestens jedoch 2 Wochen nach Zugang der Rechnung, fällig. Befindet
+sich der Kunde mit fälligen Zahlungen in Verzug und entstehen DEW21 durch die
+Beauftragung eines Rechtsanwalts oder Inkassodienstleisters als Verzugsscha-
+den i. S. v. § 288 BGB ersatzfähige Kosten, sind diese vom Kunden zu ersetzen.
+
+7.5 Bei Zahlungsverzug des Kunden in Höhe des Doppelten der rechnerisch auf
+den laufenden Kalendermonat entfallenden Abschlags- oder Vorauszahlung
+oder mit mindestens € 100,00 inklusive Mahn- und Inkassokosten ist DEW21
+berechtigt, die Lieferung einzustellen und die Anschlussnutzung durch den zu-
+ständigen Netzbetreiber unterbrechen zu lassen; das Recht zur Unterbrechung
+nach dieser Ziffer unterbleibt, solange die Sperrvoraussetzungen des § 19 Abs.
+2 GasGVV hinsichtlich Mindestbetrag und Häufigkeit der Säumnis nicht vorlie-
+gen. Bei der Berechnung des Mindestbetrags bleiben nicht titulierte Forderungen
+außer Betracht, die der Kunde schlüssig beanstandet hat oder die wegen einer
+Vereinbarung zwischen DEW21 und Kunden noch nicht fällig sind, oder die aus
+einer streitigen und noch nicht rechtskräftig entschiedenen Preiserhöhung von
+DEW21 resultieren. Dem Kunden wird die Unterbrechung spätestens vier Wo-
+chen vorher angedroht und die Beauftragung des Netzbetreibers acht Werktage
+vorher durch briefliche Mitteilung unter Angabe des Zeitpunkts der Auftragsertei-
+lung angekündigt, mindestens aber gilt die Sperrankündigungsfrist des § 19 Gas-
+GVV. DEW21 wird den Netzbetreiber zu dem in der Ankündigung genannten Zeit-
+punkt beauftragen, die Anschlussnutzung zu unterbrechen, wofür der
+Netzbetreiber nach den Vorgaben des Lieferantenrahmenvertrags Gas (Anlage 3
+zur KoV 11) sechs weitere Werktage Zeit hat. Die Unterbrechung unterbleibt,
+wenn die Folgen der Unterbrechung außer Verhältnis zur Schwere des Zahlungs-
+verzugs stehen oder der Kunde darlegt, dass hinreichende Aussicht besteht,
+dass er seinen Verpflichtungen vollumfänglich nachkommt. Der Kunde wird
+DEW21 auf etwaige Besonderheiten, die einer Unterbrechung zwingend entge-
+genstehen, unverzüglich hinweisen.
+
+7.6 Die Kosten der Unterbrechung sowie der Wiederherstellung der Belieferung
+sind vom Kunden zu ersetzen. Die Kosten können gemäß Kostenübersicht im
+Sinne von Ziff. 3 für strukturell vergleichbare Fälle pauschal berechnet werden;
+die pauschale Berechnung muss einfach nachvollziehbar sein. Die Pauschale
+darf die nach dem gewöhnlichen Lauf der Dinge zu erwartenden Kosten nicht
+übersteigen. Auf Verlangen des Kunden ist die Berechnungsgrundlage nachzu-
+weisen. Der Nachweis geringerer Kosten ist dem Kunden zu gestatten.
+
+8. Vorauszahlung
+
+8.1 DEW21 ist berechtigt, für den Erdgasverbrauch des Kunden in angemessener
+Höhe eine Vorauszahlung zu verlangen, wenn der Kunde mit einer Zahlung aus
+dem Vertrag in nicht unwesentlicher Höhe in Verzug ist, wenn der Kunde inner-
+halb eines Zeitraums von zwölf Monaten wiederholt in Zahlungsverzug gerät, bei
+nicht erfüllten Geldforderungen aus einem vorherigen Liefervertragsverhältnis
+mit DEW21 oder in sonstigen begründeten Fällen. Die Vorauszahlung ist frühes-
+tens zu Beginn der Lieferung fällig und wird von DEW21 nach billigem Ermessen
+(§ 315 BGB) festgelegt. Bei Verlangen einer Vorauszahlung sind dem Kunden
+Beginn, Höhe und die Gründe für die Vorauszahlung sowie die Voraussetzungen
+für ihren Wegfall mitzuteilen.
+Die Höhe der Vorauszahlung ergibt sich aus dem durchschnittlichen monatli-
+chen Verbrauch des vorhergehenden Abrechnungszeitraums und dem aktuellen
+Vertragspreis bzw. – sollte kein vorhergehender Abrechnungszeitraum bestehen
+– aus dem durchschnittlichen monatlichen Verbrauch vergleichbarer Kunden
+und dem aktuellen Vertragspreis. Macht der Kunde glaubhaft, dass sein Ver-
+brauch erheblich geringer ist, ist dies angemessen zu berücksichtigen.
+
+8.2 Die Vorauszahlung wird bei der jeweils nächsten Rechnungserteilung ver-
+rechnet, sofern nichts anderes vereinbart wurde. Ergibt sich dabei eine Abwei-
+chung der Vorauszahlung von der zu leistenden Zahlung, so wird der zu viel oder
+zu wenig berechnete Betrag unverzüglich erstattet bzw. nachentrichtet. Erfolgt
+eine solche Verrechnung und liegen die Voraussetzungen für eine Vorauszah-
+lung weiterhin vor, ist der Kunde verpflichtet, den verrechneten Betrag unverzüg-
+lich nach der Verrechnung als erneute Vorauszahlung nachzuentrichten.
+
+9. Preise und variable Preisbestandteile, Preisanpassungen, Steuern sowie
+sonstige, hoheitlich auferlegte Abgaben und Belastungen
+
+9.1 Der Basispreis setzt sich aus einem jährlichen Basisgrundpreis und einem
+verbrauchsabhängigen Basisarbeitspreis zusammen. Die Bestandteile des Ba-
+sispreises unterliegen dem Preisanpassungsrecht nach Ziff. 9.13. Der Basis-
+preis wird auf Grundlage der Kosten kalkuliert, die für die Belieferung aller Kun-
+den in diesem Tarif anfallen. Soweit in Besonderen Bedingungen nichts anderes
+vereinbart wurde, werden alle in den Ziff. 9.2 bis 9.11 aufgeführten Entgelte für
+Messstellenbetrieb und das an den Netzbetreiber abzuführende Netzentgelt in-
+klusive der Konzessionsabgaben sowie Steuern, Abgaben und hoheitlich aufer-
+legte Belastungen (derzeit SLP-Bilanzierungsumlage, Konvertierungsumlage
+sowie die Kosten aus dem Kauf von Emissionszertifikaten nach dem Brennstof-
+femissionshandelsgesetz (BEHG)) als variable Preisbestandteile zuzüglich zum
+Basispreis in der jeweils gültigen Höhe abgerechnet.
+Die Höhe der variablen Preisbestandteile nach den Ziff. 9.2. bis 9.11 ergibt sich
+für den Zeitpunkt des Vertragsschlusses aus dem mit dem Kunden vereinbarten
+Preisblatt bzw. der Vertragsbestätigung, wobei die jeweils aktuelle Höhe zudem
+auf der Internetseite von DEW21 (www.dew21.de) abgerufen werden kann.
+
+9.2 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich um eine vom Netzbetreiber
+erhobene und vom Marktgebietsverantwortlichen festgelegte Umlage nach § 29
+GasNZV (SLP-Bilanzierungsumlage), die für die Netznutzung zur Belieferung
+des Kunden anfällt, in der jeweils geltenden Höhe. Die Höhe der Umlage ergibt
+sich gemäß Veröffentlichung des Marktgebietsverantwortlichen (derzeit: www.
+tradinghub.eu) für den Zeitpunkt des Vertragsschlusses und wird jährlich zum
+01.10. angepasst.
+
+9.3 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich weiter um die von DEW21 an
+den örtlich zuständigen Netzbetreiber für die Netznutzung zur Belieferung des
+Kunden abzuführenden Netzentgelte in der jeweils geltenden Höhe. Der Netzbe-
+treiber ermittelt die Netzentgelte zum 01.01. eines Kalenderjahres auf Grundlage
+der von der zuständigen Regulierungsbehörde nach Maßgabe des § 21a EnWG i.
+V. m. der Anreizregulierungsverordnung (ARegV), der Gasnetzentgeltverordnung
+(GasNEV) und sonstigen Bestimmungen des EnWG festgelegten und jeweils
+zum 01.01. eines Kalenderjahres gemäß § 4 ARegV angepassten Erlösobergren-
+ze. Die Netzentgelte setzen sich aus einem Grundpreis des Netzbetreibers und
+einem verbrauchsabhängigen Arbeitspreis des Netzbetreibers zusammen. Die
+ansonsten jeweils aktuelle Höhe der Netzentgelte ist gemäß § 27 Gas-NEV vom
+örtlich zuständigen Netzbetreiber auf dessen Internetseite zu veröffentlichen.
+a) Änderungen der Netzentgelte werden gegenüber dem Kunden mit dem Zeit-
+punkt wirksam, in dem sie gegenüber DEW21 wirksam werden.
+b) absichtlich freigelassen
+c) Für den Fall, dass gegen die für die Entgelte maßgebliche, von der Regulie-
+rungsbehörde festgesetzte Erlösobergrenze Rechtsmittel eingelegt werden oder
+anhängig sind (z. B. durch den Netzbetreiber oder Dritte), ist zwischen den Par-
+teien dieses Vertrages das vom Netzbetreiber auf Grundlage der rechts- bzw.
+bestandskräftig festgesetzten Erlösobergrenze gebildete und rückwirkend ange-
+wendete Netznutzungsentgelt ebenso rückwirkend maßgeblich. Dies kann dazu
+führen, dass Entgelte für vorangegangene Zeiträume – ggfs. nach Beendigung
+des Vertrages oder der Belieferung der jeweiligen Entnahmestellen durch DEW21
+– nachgefordert oder zurückgezahlt werden müssen.
+d) Ziff. 9.3 lit. c) gilt entsprechend bei Rechtsmitteln gegen die Erlösobergrenze
+des Netzbetreibers des dem Verteilernetz vorgelagerten Netzes, sofern jene eine
+rückwirkende Änderung der Entgelte des zuständigen Netzbetreibers zur Folge
+haben.
+e) Rück- oder Nachzahlungen nach den vorstehenden Ziff. 9.3 lit. b) bis lit. d)
+werden jeweils mit dem für den jeweiligen Zeitraum maßgeblichen Basiszinssatz
+gemäß § 247 BGB verzinst; dies gilt nicht, wenn der Basiszinssatz negativ ist.
+f) Wird der Grundpreis (Netz) nach Ziff. 9.3 jährlich erhoben, berechnet DEW21
+das vom Kunden zu zahlende Entgelt im Rahmen von monatlichen Abschlägen
+bzw. Abrechnungen mit 1/12 des Jahresentgelts.
+
+9.4 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich weiter um die von DEW21 an
+den örtlich zuständigen Netzbetreiber abzuführenden Entgelte für den konventi-
+onellen Messstellenbetrieb und Messung in der jeweils geltenden Höhe. Der
+Netzbetreiber ermittelt diese Entgelte zum 01.01. eines Kalenderjahres auf
+Grundlage der von der zuständigen Regulierungsbehörde nach Maßgabe des §
+21a EnWG i. V. m. der Anreizregulierungsverordnung (ARegV), der Gasnetzent-
+geltverordnung (GasNEV) und sonstigen Bestimmungen des EnWG festgelegten
+und jeweils zum 01.01. eines Kalenderjahres gemäß § 4 ARegV angepassten
+Erlösobergrenze. Die jeweils aktuelle Höhe der vorgenannten Entgelte ist gemäß
+§ 27 GasNEV vom örtlich zuständigen Netzbetreiber auf dessen Internetseite zu
+veröffentlichen.
+a) Die Regelungen in Ziff. 9.3 lit. a) sowie lit. c) bis e) finden entsprechend An-
+wendung.
+b) DEW21 berechnet die vom Kunden zu zahlenden Entgelte im Rahmen von mo-
+natlichen Abschlägen bzw. Abrechnungen mit 1/12 der Jahresentgelte.
+
+9.5 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich weiter um die von DEW21 an
+den zuständigen Netzbetreiber aufgrund vertraglicher Vereinbarung zu leisten-
+den Zahlungen zum Ausgleich der vom Netzbetreiber abzuführenden Konzessi-
+onsabgabe in der jeweils geltenden Höhe. Die Konzessionsabgabe wird von der
+jeweiligen Gemeinde bzw. dem jeweiligen Landkreis gegenüber dem Netzbetrei-
+ber für die Einräumung des Rechts zur Benutzung öffentlicher Verkehrswege für
+die Verlegung und den Betrieb von Leitungen, die der unmittelbaren Versorgung
+von Letztverbrauchern im Gemeindegebiet mit Energie dienen, erhoben. Die
+Höhe der Konzessionsabgabe richtet sich nach dem jeweils zwischen dem Netz-
+betreiber und der betreffenden Gemeinde bzw. dem betreffenden Landkreis nach
+Maßgabe von § 2 der Konzessionsabgabenverordnung (KAV) vereinbarten Kon-
+zessionsabgabensatz in der jeweils gültigen Höhe. Die Höhe der Konzessionsab-
+gabe für den Zeitpunkt des Vertragsschlusses ergibt sich aus dem mit dem Kun-
+den vereinbarten Preisblatt bzw. Vertragsbestätigung, die jeweils aktuelle Höhe
+kann zudem auf der Internetseite von DEW21 (www.dew21.de) abgerufen wer-
+den.
+
+9.6 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich weiter um die nach Maßgabe
+der Festlegung der Bundesnetzagentur (BNetzA) vom 21.12.2016 („Konni Gas
+2.0“, Az.: BK7-16-050) von dem Marktgebietsverantwortlichen erhobene Konver-
+tierungsumlage in der jeweils geltenden Höhe. Die Konvertierungsumlage wird
+dem Kunden auf Grundlage der tatsächlich verbrauchten Mengen in Rechnung
+gestellt. Die Konvertierungsumlage wird jährlich zum 01.10. festgelegt und spä-
+testens sechs Wochen vor Beginn des jeweiligen Geltungszeitraums auf der In-
+ternetseite des Marktgebietsverantwortlichen (derzeit www.tradinghub.eu) in
+der Einheit Euro/MWh veröffentlicht.
+
+9.7 Der Preis nach Ziff. 9.1 Satz 1 und 2 erhöht sich weiter um die DEW21 treffen-
+den Belastungen aus dem Kauf von Emissionszertifikaten nach dem Brennstoff-
+emissionshandelsgesetz (BEHG) in der jeweils geltenden Höhe in ct/kWh („CO2-
+Aufschlag“). Dieser Preisbestandteil umfasst die Mehrkosten, die von DEW21
+als gesetzlich festgelegter Festpreis für Erdgas unter Anrechnung (anteilig) ge-
+lieferter biogener Brennstoffe i. S. d. § 7 Abs. 4 Nr. 2 BEHG für den Verbrauch des
+Kunden gezahlt werden, soweit und solange das BEHG Festpreise vorsieht (vor-
+aussichtlich bis 31.12.2025). Der Festpreis für Emissionszertifikate ist in § 10
+Abs. 2 BEHG festgelegt. Er wurde 2021 erstmals erhoben und ist bis zum
+31.12.2025 ein jährlich steigender Festpreis. Der Preis beträgt für den Zeitraum
+vom 01.01.2022 bis 31.12.2022 nach aktueller Rechtslage € 30,00 pro Emissi-
+onszertifikat (dies entspricht der Berechtigung zur Emission einer Tonne Treibh-
+ausgas in Tonnen Kohlendioxidäquivalent im Jahr). Die Ermittlung des Kohlendi-
+oxidäquivalents, d. h. der Brennstoffemissionen von Erdgas, aufgrund derer eine
+Berechnung eines Preises in ct/kWh ermöglicht wird, erfolgt nach Maßgabe der
+in § 5 EBeV 2022 i. V. m. Anlage 1 EBeV festgelegten Berechnungsmethode und
+Faktoren.
+
+9.8 Die von DEW21 (an den Bilanzkreisverantwortlichen und von diesem) an den
+Marktgebietsverantwortlichen abzuführende Gasspeicherumlage gemäß § 35 e
+EnWG. Die dem Marktgebietsverantwortlichen im Zusammenhang mit seinen
+Aufgaben zur Sicherstellung der Versorgungssicherheit entstehenden Kosten
+gemäß §§ 35 c und d EnWG werden gemäß § 35 e EnWG diskriminierungsfrei
+und in einem transparenten Verfahren auf die Bilanzkreisverantwortlichen im
+Marktgebiet umgelegt. Die Gasspeicherumlage wird erstmals zum 01.10.2022
+und bis 31.03.2025 vom Marktgebietsverantwortlichen auf die täglich aus einem
+Bilanzkreis ausgespeisten Mengen für SLP- und RLM-Marktlokationen erhoben.
+Die Gasspeicherumlage wird vom Marktgebietsverantwortlichen jeweils zum
+01.01. und 01.07. eines Jahres angepasst und sechs Wochen vor Beginn des je-
+weiligen Geltungszeitraums auf der Internetseite des Marktgebietsverantwortli-
+chen (derzeit www.tradinghub.eu) in der Einheit Euro/MWh veröffentlicht.
+
+9.9 absichtlich freigelassen
+
+9.10 absichtlich freigelassen
+
+9.11 Die Preise nach Ziff. 9.1 bis 9.10 sind Nettopreise. Zusätzlich fallen Ener-
+giesteuer sowie – auf diese Nettopreise und die Energiesteuer – Umsatzsteuer
+in der jeweils geltenden Höhe an. Ändern sich diese Steuersätze, ändern sich die
+Bruttopreise entsprechend.
+Wird die Belieferung oder die Verteilung von Erdgas nach Vertragsschluss mit in
+Ziff. 9.1 bis 9.11 Satz 1 nicht aufgeführten zusätzlichen Steuern oder Abgaben
+belegt, erhöht sich der Preis nach Ziff. 9.1 um die hieraus entstehenden Mehr-
+kosten in der jeweils geltenden Höhe. Satz 2 gilt entsprechend, falls die Beliefe-
+rung oder die Verteilung von Erdgas nach Vertragsschluss mit einer hoheitlich
+auferlegten, allgemein verbindlichen Belastung (d. h. keine Bußgelder o. ä.) be-
+legt wird, soweit diese unmittelbaren Einfluss auf die Kosten für die nach diesem
+Vertrag geschuldeten Leistungen hat. Die Weitergabe in der jeweils geltenden
+Höhe nach Satz 1 und 2 führt bei Erstattungen (z. B. in Form negativer Umlagen)
+zu einer entsprechenden Entgeltreduzierung. Eine Weiterberechnung erfolgt
+nicht, soweit die Mehrkosten nach Höhe und Zeitpunkt ihres Entstehens bereits
+bei Vertragsschluss konkret vorhersehbar waren oder die jeweilige gesetzliche
+Regelung der Weiterberechnung entgegensteht. Die Weitergabe ist auf die Mehr-
+kosten beschränkt, die nach dem Sinn und Zweck der gesetzlichen Regelung
+dem einzelnen Vertragsverhältnis (z. B. nach Kopf oder nach Verbrauch) zuge-
+ordnet werden können. Eine Weiterberechnung erfolgt ab dem Zeitpunkt der Ent-
+stehung der Mehrkosten. Der Kunde wird über die Anpassung spätestens mit der
+Rechnungsstellung informiert.
+Dies gilt entsprechend, falls sich die Höhe einer weitergegebenen Steuer oder
+Abgabe ändert; bei einem Wegfall oder einer Absenkung ist DEW21 zu einer Wei-
+tergabe verpflichtet, oder falls auf die Belieferung oder die Verteilung von Erdgas
+nach Vertragsschluss eine hoheitlich auferlegte, allgemeinverbindliche Belas-
+tung (d. h. keine Bußgelder o. Ä.) entfällt, soweit diese unmittelbaren Einfluss auf
+die Kosten für die nach diesem Vertrag geschuldeten Leistungen hat.
+9.12 Ist zwischen DEW21 und dem Kunden vertraglich eine Preisgarantie des
+Preises nach Ziff. 9.1 während einer bestimmten Mindestlaufzeit vereinbart, so
+findet während dieser Mindestlaufzeit Ziff. 9.13 keine Anwendung. Auch wäh-
+rend der Dauer einer Preisgarantie erfolgen jedoch Anpassungen der Preise auf-
+grund von Änderungen der Abgaben und Steuern nach Ziff. 9.11 (Energie- und
+Umsatzsteuer), der variablen Entgelte nach Ziff. 9.2 bis 9.10 in Form der Belas-
+tungen nach § 29 GasNZV, den BNetzAFestlegungen (Konni Gas 2.0) und BEHG
+sowie der Netzentgelte.
+
+9.13 Änderungen der Preise nach Ziff. 9.1 Satz 1 und 2 – mit Ausnahme der ge-
+sondert an den Kunden weitergegebenen Preisbestandteile nach Ziff. 9.1 Satz 3
+und Ziff. 9.2 bis 9.10 sowie etwaiger zukünftiger Steuern, Abgaben und sonstiger
+hoheitlich auferlegter Belastungen nach Ziff. 9.11 – durch DEW21 erfolgen im
+Wege der einseitigen Leistungsbestimmung in Ausübung billigen Ermessens
+nach § 315 BGB. Die gesonderte Weitergabe für den Preisbestandteil nach Ziff.
+9.7 endet, wenn das BEHG keine Festpreise mehr vorsieht (voraussichtlich am
+31.12.2025); der Preisbestandteil findet dann im Rahmen der einseitigen Leis-
+tungsbestimmung durch DEW21 nach dieser Ziff. 9.12 Berücksichtigung. Der
+Kunde hat gemäß § 315 Abs. 3 BGB das Recht, gerichtlich die Ausübung des
+billigen Ermessens von DEW21 überprüfen zu lassen. Bei der einseitigen Leis-
+tungsbestimmung durch DEW21 sind ausschließlich Änderungen der Kosten zu
+berücksichtigen, die für die Preisermittlung nach Ziff. 9.1 maßgeblich sind.
+DEW21 ist bei Kostensteigerungen berechtigt, bei Kostensenkungen verpflichtet,
+eine Preisänderung durchzuführen. Bei der Preisermittlung ist DEW21 verpflich-
+tet, Kostensteigerungen nur unter Ansatz gegenläufiger Kostensenkungen zu
+berücksichtigen und eine Saldierung von Kostensteigerungen und Kostensen-
+kungen vorzunehmen.
+DEW21 überwacht und überprüft fortlaufend die Entwicklung dieser Kosten.
+DEW21 hat die Art, den Umfang und den Zeitpunkt einer Preisänderung so zu
+bestimmen, dass Kostensenkungen nach denselben Maßstäben Rechnung ge-
+tragen werden wie Kostenerhöhungen. Die einseitige Leistungsbestimmung von
+DEW21 nach billigem Ermessen bezieht sich insbesondere auch auf die jeweili-
+gen Zeitpunkte einer Preisanpassung; diese sind so zu wählen, dass Kostensen-
+kungen nicht nach für den Kunden ungünstigeren Maßstäben Rechnung getra-
+gen werden als Kostenerhöhungen, also Kostensenkungen mindestens in
+gleichem Umfang preiswirksam werden wie Kostenerhöhungen. Ist eine Umlage
+nach Ziff. 9.2 bis 9.10 negativ, reduziert sich das für die gelieferte Energie zu
+zahlende Entgelt in entsprechender Höhe.
+Änderungen der Preise werden jeweils zum Monatsersten und erst nach Mittei-
+lung in Textform an den Kunden wirksam, die mindestens sechs Wochen vor der
+beabsichtigten Änderung erfolgen muss. DEW21 wird zu den beabsichtigten Än-
+derungen, zeitgleich mit der Mitteilung an den Kunden, die Änderung auf ihrer
+Internetseite veröffentlichen.
+Ist der Kunde mit der mitgeteilten Preisanpassung nicht einverstanden, hat er
+das Recht, den Vertrag ohne Einhaltung einer Kündigungsfrist zum Zeitpunkt
+des Wirksamwerdens der Preisanpassung zu kündigen. Hierauf wird der Kunde
+von DEW21 in der Mitteilung gesondert hingewiesen.
+
+9.14 Unberührt bleibt das bestehende gesetzliche Sonderkündigungsrecht des
+Kunden bei einseitiger Änderung der Vertragsbedingungen durch DEW21 gemäß
+§ 41 Abs. 3 EnWG. DEW21 wird den Kunden über solche Änderungen gemäß §
+41 Abs. 3 Satz 1 EnWG informieren.
+
+9.15 Informationen über aktuelle Produkte und Tarife erhält der Kunde unter der
+Telefonnummer 0231.22 22 21 21 oder auf der Internetseite von DEW21
+(www.dew21.de).
+
+10. Zahlungsverweigerung
+
+Einwände gegen Rechnungen oder Abschlagsberechnungen berechtigen zum
+Zahlungsaufschub oder zur Zahlungsverweigerung nur, sofern der zugrunde ge-
+legte Verbrauch ohne ersichtlichen Grund mehr als doppelt so hoch wie der ver-
+gleichbare Verbrauch im vorherigen Abrechnungszeitraum ist und der Kunde
+eine Nachprüfung der Messeinrichtung verlangt und solange durch die Nachprü-
+fung nicht die ordnungsgemäße Funktion der Messeinrichtung festgestellt ist
+oder
+sofern aus Sicht eines verständigen Kunden die ernsthafte Möglichkeit eines of-
+fensichtlichen Fehlers besteht, z. B. bei falschen Kundennamen, verwechselten
+Entnahmestellen, ohne Weiteres erkennbaren Rechenfehlern oder bei weit außer-
+halb der Plausibilität liegenden Verbrauchsmengen, auch wenn eine Nachprü-
+fung der Messeinrichtung deren ordnungsgemäße Funktion bestätigt hat.
+Rechte des Kunden nach § 315 BGB bleiben von dieser Ziff. 10 unberührt.
+
+11. Aufrechnung
+
+Gegen Forderungen von DEW21 kann nur mit unbestrittenen oder rechtskräftig
+festgestellten Gegenansprüchen aufgerechnet werden. Dies gilt nicht für An-
+sprüche des Kunden aufgrund vollständiger oder teilweiser Nichterfüllung oder
+mangelhafter Erfüllung der Hauptleistungspflichten. Weiterhin gilt dies nicht für
+Forderungen des Kunden, die im Rahmen des Rückabwicklungsverhältnisses
+nach Widerruf des Vertrags entstehen.
+
+12. Zuständiger Netzbetreiber
+
+DEW21 ist gegenüber dem Kunden nur Lieferant des Erdgases an dessen ver-
+traglich benannter Lieferstelle.
+Zuständiger Netzbetreiber ist der Betreiber des örtlichen Verteilernetzes, in dem
+die Lieferstelle liegt.
+DEW21 wird dem Kunden mit der Vertragsbestätigung den für ihn zuständigen
+Netzbetreiber mitteilen.
+Aktuelle Informationen zu Wartungsdiensten und -entgelten sind beim Netzbe-
+treiber erhältlich.
+
+13. Ansprüche wegen Versorgungsstörungen und Haftung
+
+13.1 Ansprüche wegen Schäden durch Unterbrechung oder Unregelmäßigkeiten
+in der Erdgasversorgung sind, soweit es sich um Folgen einer Störung des Netz-
+betriebs einschließlich des Netzanschlusses handelt, gegen den örtlichen Netz-
+betreiber geltend zu machen (§ 18 NDAV).
+
+13.2 DEW21 wird unverzüglich über die mit der Schadensverursachung zusam-
+menhängenden Tatsachen Auskunft geben, wenn sie ihr bekannt sind oder von
+ihr in zumutbarer Weise aufgeklärt werden können und der Kunde dies wünscht.
+
+13.3 In allen übrigen Haftungsfällen (also bei schuldhafter vertraglicher Pflicht-
+verletzung wie z. B. bei Nichterfüllung der Lieferpflicht oder ungenauer oder
+verspäteter Abrechnung) ist die Haftung der Parteien sowie ihrer Erfüllungs- und
+Verrichtungsgehilfen für schuldhaft verursachte Schäden ausgeschlossen, so-
+weit der Schaden nicht durch Vorsatz oder grobe Fahrlässigkeit herbeigeführt
+wurde; dies gilt nicht bei Schäden aus der Verletzung des Lebens, des Körpers
+oder der Gesundheit oder der schuldhaften Verletzung wesentlicher Vertrags-
+pflichten, d. h. solcher Pflichten, deren Erfüllung die ordnungsgemäße Durchfüh-
+rung des Vertrages überhaupt erst ermöglicht und auf deren Einhaltung der Ver-
+tragspartner regelmäßig vertrauen darf (sog. Kardinalpflichten).
+
+13.4 Im Falle einer Verletzung wesentlicher Vertragspflichten, welche nicht auf
+Vorsatz oder grobe Fahrlässigkeit beruht, beschränkt sich die Haftung auf den
+Schaden, den die haftende Partei bei Abschluss des jeweiligen Vertrages als
+mögliche Folge der Vertragsverletzung vorausgesehen hat oder unter Berück-
+sichtigung der Umstände, die sie kannte oder kennen musste, hätte voraussehen
+müssen. Gleiches gilt bei grob fahrlässigem Verhalten einfacher Erfüllungsgehil-
+fen (nicht leitende Angestellte) außerhalb des Bereichs der wesentlichen Ver-
+tragspflichten sowie der Lebens-, Körper- und Gesundheitsschäden.
+
+13.5 Die Bestimmungen des Produkthaftungsgesetzes bleiben unberührt.
+
+14. Zutrittsrecht
+
+14.1 Der Kunde hat nach vorheriger Benachrichtigung dem mit einem Ausweis
+versehenen Beauftragten des Netzbetreibers, des Messstellenbetreibers oder
+von DEW21 den Zutritt zu seinem Grundstück und zu seinen Räumen zu gestat-
+ten, soweit dies zur Ermittlung der preislichen Bemessungsgrundlagen, zur Able-
+sung der Messeinrichtungen oder im Fall einer berechtigten Unterbrechung der
+Versorgung (s. Ziff. 7) erforderlich ist. Die Benachrichtigung kann durch Mittei-
+lung an den Kunden oder durch Aushang am oder im jeweiligen Haus erfolgen.
+Sie muss mindestens eine Woche vor dem Betretungstermin erfolgen; mindes-
+tens ein Ersatztermin ist anzubieten. Der Kunde hat dafür Sorge zu tragen, dass
+die Messeinrichtungen zugänglich sind.
+
+14.2 Wenn der Kunde den Zutritt unberechtigt verweigert oder behindert, ist er
+DEW21 zum Ersatz der dadurch entstandenen Kosten verpflichtet. DEW21 kann
+alternativ dem Kunden die dadurch entstandenen Kosten pauschal gemäß Kos-
+tenübersicht im Sinne von Ziff. 3 in Rechnung stellen. Bei einer pauschalen Be-
+rechnung der Kosten ist dem Kunden der Nachweis gestattet, solche Kosten
+seien nicht entstanden oder wesentlich geringer als die Höhe der Pauschale.
+Auf Verlangen des Kunden ist die Berechnungsgrundlage nachzuweisen; die
+pauschale Berechnung muss einfach nachvollziehbar sein und darf die nach
+dem gewöhnlichen Lauf der Dinge zu erwartenden Kosten nicht übersteigen.
+
+15. Messung und Ablesung
+
+Die Menge der gelieferten Energie wird durch Messeinrichtungen bzw. Messsys-
+teme (oder rechtmäßige Ersatzwertbildung) des zuständigen Messstellenbetrei-
+bers ermittelt. Die Ablesung der Messeinrichtungen wird vom Messstellenbetrei-
+ber oder DEW21 oder, sofern keine Fernübermittlung der Verbrauchsdaten (z. B.
+über ein intelligentes Messsystem) erfolgt, auf Verlangen von DEW21 oder des
+Messstellenbetreibers kostenlos vom Kunden durchgeführt. Verlangt DEW21
+eine Selbstablesung des Kunden, fordert DEW21 den Kunden rechtzeitig dazu
+auf. Die Ablesung der Messeinrichtungen erfolgt zum Zwecke der Abrechnung,
+etwa anlässlich eines Lieferantenwechsels oder bei Vorliegen eines berechtigten
+Interesses von DEW21 an einer Überprüfung der Ablesung, und zum Zwecke der
+Erstellung der Abrechnungsinformationen. Der Kunde kann einer Selbstablesung
+widersprechen, wenn ihm diese nicht zumutbar ist. Soweit der Kunde für einen
+bestimmten Abrechnungszeitraum trotz entsprechender Verpflichtung keine Ab-
+lesedaten übermittelt hat oder DEW21 aus anderen Gründen, die DEW21 nicht zu
+vertreten hat, den tatsächlichen Verbrauch nicht ermitteln kann (etwa, weil keine
+Messwerte bzw. weil vom Messstellenbetreiber keine rechtmäßig ermittelten
+Ersatzwerte verfügbar sind), kann DEW21 den Verbrauch auf der Grundlage der
+letzten Ablesung oder bei einem Neukunden nach dem Verbrauch vergleichbarer
+Kunden jeweils unter angemessener Berücksichtigung der tatsächlichen Verhält-
+nisse schätzen.
+Entsprechendes gilt bei Änderung des Umsatzsteuersatzes und erlösabhängiger
+Abgabensätze.
+
+16. Nachprüfung von Messeinrichtungen
+
+16.1 Der Kunde kann jederzeit von DEW21 verlangen, eine Nachprüfung der Mes-
+seinrichtungen an seiner Entnahmestelle durch eine Eichbehörde oder eine
+staatlich anerkannte Prüfstelle im Sinne von § 40 Abs. 3 MessEG zu veranlassen.
+Die Kosten der Nachprüfung fallen dem Kunden nur dann zur Last, sofern die
+eichrechtlichen Verkehrsfehlergrenzen nicht überschritten werden.
+
+16.2 Ergibt eine Nachprüfung der Messeinrichtungen eine Überschreitung der
+eichrechtlichen Verkehrsfehlergrenzen oder werden Fehler in der Ermittlung des
+Rechnungsbetrages festgestellt (wie z. B. auch bei einer Rechnung auf der
+Grundlage falscher Messwerte), so wird der zu viel oder zu wenig berechnete
+Betrag unverzüglich erstattet bzw. nachentrichtet oder mit der nächsten Ab-
+schlagszahlung verrechnet. Ansprüche nach dieser Ziffer sind auf den der Fest-
+stellung des Fehlers vorhergehenden Ablesezeitraum beschränkt, es sei denn,
+die Auswirkung des Fehlers kann über einen größeren Zeitraum festgestellt wer-
+den; in diesem Fall ist der Anspruch auf längstens drei Jahre beschränkt.
+
+17. Verwendung des Erdgases
+
+17.1 Das Erdgas wird ausschließlich für die Zwecke des Letztverbrauchs gelie-
+fert. Eine Weiterleitung an Dritte bedarf der vorherigen Zustimmung von DEW21
+in Textform.
+
+17.2 DEW21 ist berechtigt, sofort die Lieferung einzustellen und die Anschluss-
+nutzung unterbrechen zu lassen, wenn der Kunde in nicht unerheblichem Maße
+schuldhaft Erdgas unter Umgehung, Beeinflussung (Manipulation) oder vor An-
+bringung der Messeinrichtungen verwendet („Gasdiebstahl“) und die Unterbre-
+chung zur Verhinderung einer weiteren unberechtigten Energieentnahme erfor-
+derlich ist. In einem wiederholten Fall ist DEW21 ohne Einhaltung einer Frist zur
+Kündigung aus wichtigem Grund (s. Ziff. 18.2) berechtigt.
+
+18. Vertragslaufzeit und
+
+18.1 Das Vertragsverhältnis läuft auf unbestimmte Zeit und kann von beiden
+Seiten ordentlich mit einer Frist von einem Monat in Textform gekündigt wer-
+den, sofern im Vertrag oder in vereinbarten Besonderen Bedingungen nichts
+Abweichendes geregelt ist. DEW21 wird dem Kunden dessen Kündigung inner-
+halb einer Woche nach Zugang unter Angabe des Vertragsendes in Textform
+bestätigen.
+
+18.2 Der Vertrag kann aus wichtigem Grund ohne Einhaltung einer Frist in Text-
+form gekündigt und die Lieferung eingestellt werden. Mit Ausnahme der Zah-
+lungsverpflichtungen des Kunden enden die beiderseitigen Vertragspflichten
+mit sofortiger Wirkung. DEW21 muss den Kunden unverzüglich beim zuständi-
+gen Netzbetreiber abmelden. Soweit die Entnahmen des Kunden im Falle einer
+außerordentlichen Kündigung von DEW21 trotz der Abmeldung (etwa wegen
+Bearbeitungsfristen des Netzbetreibers, Prozessfristen aus den Festlegungen
+der BNetzA zu Lieferantenwechselprozessen) über den Zeitpunkt der Vertrags-
+beendigung hinaus DEW21 bilanziell zugeordnet werden, ohne dass DEW21
+dafür einen Ausgleich erhält (z. B. im Rahmen der Mehr- oder Mindermengen-
+abrechnung des Netzbetreibers), schuldet der Kunde für diese fortwährende
+Belieferung das Entgelt nach diesem Vertrag.
+Ein wichtiger Grund liegt insbesondere vor, wenn ein Fall der Ziff. 17.2 wiederholt
+gegeben ist oder der Kunde seiner Verpflichtung zur Leistung einer Vorauszah-
+lung nach Ziff. 8 nicht fristgerecht oder nicht vollständig nachkommt oder die
+Voraussetzungen nach Ziff. 7.5 wiederholt vorliegen und, im Fall des Zahlungs-
+verzugs, dem Kunden die Kündigung mindestens zwei Wochen vorher angedroht
+wurde; die Kündigung unterbleibt in diesem Fall, wenn die Folgen der Kündigung
+außer Verhältnis zur Schwere des Zahlungsverzugs stehen oder der Kunde dar-
+legt, dass hinreichende Aussicht besteht, dass er seinen Verpflichtungen vollum-
+fänglich nachkommt.
+
+18.3 Ein wichtiger Grund liegt auch vor, wenn ein Zwangsvollstreckungsverfah-
+ren gegen das gesamte Vermögen der anderen Partei oder eines wesentlichen
+Teils dieses Vermögens eingeleitet wurde, Gründe für die Eröffnung eines Insol-
+venzverfahrens gegen die andere Partei vorliegen, oder die andere Partei einen
+Eigenantrag auf Eröffnung des Insolvenzverfahrens stellt, ein solches Verfahren
+eröffnet oder mangels Masse abgelehnt wurde, oder wenn sonst ein Grund zur
+Annahme besteht, dass die andere Partei ihre Zahlungen einstellen wird.
+
+18.4 Darüber hinaus ist DEW21 berechtigt, diesen Vertrag bei Vorliegen einer
+negativen Auskunft der SCHUFA, Bürgel oder Creditreform insbesondere zu fol-
+genden Punkten außerordentlich zu kündigen: Zwangsvollstreckung, erfolglose
+Pfändung, eidesstattliche Versicherung zum Vermögen, Insolvenzverfahren (Ei-
+genantrag auf Eröffnung, eröffnetes Verfahren oder mangels Masse abgelehnte
+Eröffnung), Restschuldbefreiung.
+
+19. Umzug, Übertragung des Vertrags
+
+19.1 Der Kunde ist verpflichtet, DEW21 jeden Umzug unverzüglich vorab unter
+Angabe des Umzugsdatums, der neuen Anschrift und der neuen Gaszählernum-
+mer oder Marktlokations-Identifikationsnummer in Textform mitzuteilen. Im Re-
+gelfall muss diese Mitteilung bis spätestens 10 Werktage vor dem Umzugsda-
+tum erfolgen, um DEW21 eine rechtzeitige Ab- bzw. Ummeldung beim
+Netzbetreiber zu ermöglichen.
+
+19.2 Bei einem Umzug kann der Kunde den Vertrag mit einer Frist von sechs
+Wochen in Textform und unter Mitteilung seiner zukünftigen Anschrift oder der
+zur Bezeichnung seiner zukünftigen Entnahmestelle verwendeten Marktloka-
+tions-Identifikationsnummer kündigen. Die Kündigung kann mit Wirkung zum
+Zeitpunkt des Auszugs oder mit Wirkung zu einem späteren Zeitpunkt erklärt
+werden.
+
+19.3 Die Kündigung nach Ziff. 19.2 beendet diesen Vertrag nicht und DEW21 wird
+den Kunden zu den bisherigen Vertragsbedingungen an seinem neuen Wohnsitz
+weiterbeliefern, wenn DEW21 dem Kunden dies binnen zwei Wochen nach Erhalt
+der Kündigung anbietet und die Belieferung an dessen neuem Wohnsitz möglich
+ist. Die Belieferung zum Zeitpunkt des Einzugs setzt voraus, dass der Kunde
+DEW21 das Umzugsdatum rechtzeitig mitgeteilt hat.
+
+19.4 Unterbleibt die Mitteilung des Kunden nach Ziff. 19.1 aus Gründen, die die-
+ser zu vertreten hat, und wird DEW21 die Tatsache des Umzugs auch sonst nicht
+bekannt, ist der Kunde verpflichtet, weitere Entnahmen an seiner bisherigen Lie-
+ferstelle, für die DEW21 u. a. gegenüber dem örtlichen Netzbetreiber einstehen
+muss, nach den Preisen dieses Vertrages zu vergüten. Die Pflicht von DEW21 zur
+unverzüglichen Abmeldung der bisherigen Lieferstelle beim Netzbetreiber nach
+Kenntnis über den Auszug bleibt unberührt.
+
+19.5 DEW21 ist berechtigt, die Rechte und Pflichten aus dem Vertrag als Gesamt-
+heit auf einen personell, technisch und wirtschaftlich leistungsfähigen Dritten zu
+übertragen. Eine Übertragung ist dem Kunden rechtzeitig zuvor mitzuteilen. Ist
+der Kunde mit der Übertragung des Vertrages nicht einverstanden, hat er das
+Recht, den Vertrag ohne Einhaltung einer Kündigungsfrist zu kündigen. Hierauf
+wird der Kunde von DEW21 in der Mitteilung gesondert hingewiesen.
+
+20. Gerichtsstand
+
+Für den Gerichtsstand gelten die gesetzlichen Vorschriften. Abweichend von
+Satz 1 ist Dortmund für alle Streitigkeiten aus und in Zusammenhang mit diesem
+Vertrag Gerichtsstand für Kunden, die Kaufleute oder juristische Personen des
+öffentlichen Rechts bzw. öffentlich-rechtliche Sondervermögen sind. Satz 2 gilt
+entsprechend, wenn der Kunde keinen allgemeinen Gerichtsstand im Inland hat
+oder wenn der Kunde nach Vertragsschluss seinen Wohnsitz oder gewöhnlichen
+Aufenthaltsort bzw. seine Niederlassung aus dem Geltungsbereich der Zivilpro-
+zessordnung verlegt oder sein Wohnsitz oder gewöhnlicher Aufenthaltsort oder
+seine Niederlassung im Zeitpunkt der Klageerhebung nicht bekannt ist.
+
+21. Vertragsänderungen
+
+21.1 Die Regelungen des Vertrages und dieser Bedingungen beruhen auf den
+gesetzlichen und sonstigen Rahmenbedingungen zum Zeitpunkt des Vertrags-
+schlusses (z. B. EnWG, GasGVV, GasNZV, MsbG, höchstrichterliche Rechtspre-
+chung, Entscheidungen der Bundesnetzagentur). Das vertragliche Äquivalenz-
+verhältnis kann nach Vertragsschluss durch unvorhersehbare Änderungen (z. B.
+durch Gesetzesänderungen, sofern deren konkreter Inhalt nicht bereits – etwa in
+der Phase zwischen dem Abschluss des förmlichen Gesetzgebungsverfahrens
+und dem Inkrafttreten – absehbar war), die DEW21 nicht veranlasst und auf die
+sie auch keinen Einfluss hat, in nicht unbedeutendem Maße gestört werden.
+Ebenso kann nach Vertragsschluss eine im Vertrag und/oder diesen Bedingun-
+gen entstandene Lücke nicht unerhebliche Schwierigkeiten bei der Durchführung
+des Vertrages entstehen lassen (etwa wenn die Rechtsprechung eine Klausel für
+unwirksam erklärt), die nur durch eine Anpassung oder Ergänzung zu beseitigen
+sind. In solchen Fällen ist DEW21 verpflichtet, den Vertrag und diese Bedingun-
+gen – mit Ausnahme der Preise – insoweit anzupassen und/oder zu ergänzen,
+als es die Wiederherstellung des Äquivalenzverhältnisses von Leistung und Ge-
+genleistung und/oder der Ausgleich entstandener Vertragslücken zur zumutba-
+ren Fort- und Durchführung des Vertragsverhältnisses erforderlich macht (z. B.
+mangels gesetzlicher Überleitungsbestimmungen).
+
+21.2 Anpassungen des Vertrages und dieser Bedingungen nach vorstehender
+Ziffer sind nur zum Monatsbeginn möglich. Die Anpassung wird nur wirksam,
+wenn DEW21 dem Kunden die Anpassung spätestens sechs Wochen vor dem
+geplanten Wirksamwerden in Textform mitteilt. Ist der Kunde mit der mitgeteil-
+ten Vertragsanpassung nicht einverstanden, hat er das Recht, den Vertrag ohne
+Einhaltung einer Kündigungsfrist in Textform zu kündigen. Hierauf wird der Kun-
+de von DEW21 in der Mitteilung gesondert hingewiesen.
+
+22. Datenschutz, Datenaustausch mit Auskunfteien und Widerspruchsrecht
+
+22.1 Verantwortlicher im Sinne der gesetzlichen Bestimmungen zum Datenschutz
+(insbes. der Datenschutz-Grundverordnung – DSGVO) für die Verarbeitung der per-
+sonenbezogenen Daten des Kunden ist: Dortmunder Energie- und Wasserversor-
+gung GmbH (DEW21), Geschäftsführung: Peter Flosbach (Sprecher der Geschäfts-
+führung), Dr. Gerhard Holtmeier, Matthias Klein-Lassek, Günter-Samtlebe-Platz 1,
+44135 Dortmund, E-Mail: info@dew21.de, Telefon 0231.544-0.
+
+22.2 Der Datenschutzbeauftragte von DEW21 steht dem Kunden für Fragen zur
+Verarbeitung seiner personenbezogenen Daten unter Datenschutzbeauftragter
+DEW21, Günter-Samtlebe-Platz 1, 44135 Dortmund, E-Mail:
+datenschutz@dew21.de, zur Verfügung.
+
+22.3 DEW21 verarbeitet folgende Kategorien personenbezogener Daten: Kon-
+taktdaten des Kunden (z. B. Name, Adresse, E-Mail-Adresse, Telefonnummer),
+Daten zur Lieferstelle (z. B. Zählernummer, Identifikationsnummer der Marktlo-
+kation), Verbrauchsdaten, Angaben zum Belieferungszeitraum, Abrechnungsda-
+ten (z. B. Bankverbindungsdaten), Daten zum Zahlungsverhalten.
+
+22.4 DEW21 verarbeitet die personenbezogenen Daten des Kunden zu den fol-
+genden Zwecken und auf folgenden Rechtsgrundlagen:
+a) Erfüllung (inklusive Abrechnung) des Energieliefervertrages und Durchführung
+vorvertraglicher Maßnahmen auf Anfrage des Kunden auf Grundlage des Art. 6
+Abs. 1 lit. b) DSGVO sowie der §§ 49 ff. MsbG.
+b) Erfüllung rechtlicher Verpflichtungen (z. B. wegen handels- oder steuerrechtli-
+cher Vorgaben) auf Grundlage von Art. 6 Abs. 1 lit. c) DSGVO.
+c) Direktwerbung und Marktforschung auf Grundlage von Art. 6 Abs. 1 lit. f) DS-
+GVO. Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f) DSGVO dürfen nur
+erfolgen, soweit dies zur Wahrung berechtigter Interessen von DEW21 oder Drit-
+ter erforderlich ist und nicht die Interessen oder Grundrechte und Grundfreihei-
+ten der betroffenen Person, die den Schutz personenbezogener Daten erfordern,
+überwiegen. Der Nutzung dieser Daten zur Direktwerbung und Marktforschung
+kann der Kunde jederzeit gemäß Art. 21 Abs. 2 DSGVO widersprechen.
+d) Soweit der Kunde DEW21 eine Einwilligung zur Verarbeitung personenbezoge-
+ner Daten zur Telefonwerbung erteilt hat, verarbeitet DEW21 personenbezogene
+Daten auf Grundlage von Art. 6 Abs. 1 lit. a) DSGVO. Eine Einwilligung zur Tele-
+fonwerbung kann der Kunde jederzeit gemäß Art. 7 Abs. 3 DSGVO widerrufen.
+e) DEW21 übermittelt im Rahmen dieses Vertragsverhältnisses erhobene perso-
+nenbezogene Daten über die Beantragung, die Durchführung und Beendigung
+dieser Geschäftsbeziehung sowie Daten über nicht vertragsgemäßes Verhalten
+oder betrügerisches Verhalten an die SCHUFA Holding AG, Kormoranweg 5,
+65201 Wiesbaden, und die Creditreform Dortmund Scharf GmbH & Co. KG,
+Phoenixseestr. 4, 44263 Dortmund. Rechtsgrundlagen dieser Übermittlungen
+sind Art. 6 Abs. 1 lit. b) und Art. 6 Abs. 1 lit. f) DSGVO. Übermittlungen auf der
+Grundlage von Art. 6 Abs. 1 lit. f) DSGVO dürfen nur erfolgen, soweit dies zur
+Wahrung berechtigter Interessen von DEW21 oder Dritter erforderlich ist und
+nicht die Interessen oder Grundrechte und Grundfreiheiten der betroffenen Per-
+son, die den Schutz personenbezogener Daten erfordern, überwiegen. Der Daten-
+austausch mit der SCHUFA dient auch der Erfüllung gesetzlicher Pflichten zur
+Durchführung von Kreditwürdigkeitsprüfungen von Kunden (§§ 505a und 506
+BGB). Die SCHUFA verarbeitet die erhaltenen Daten und verwendet sie auch zum
+Zwecke der Profilbildung (Scoring), um ihren Vertragspartnern im Europäischen
+Wirtschaftsraum und in der Schweiz sowie ggf. weiteren Drittländern (sofern zu
+diesen ein Angemessenheitsbeschluss der Europäischen Kommission besteht)
+Informationen unter anderem zur Beurteilung der Kreditwürdigkeit von natürli-
+chen Personen zu geben. Nähere Informationen zur Tätigkeit der SCHUFA kön-
+nen dem Anhang „SCHUFA-Informationsblatt“ nach Art. 14 DSGVO entnommen
+oder online unter www.schufa.de/datenschutz eingesehen werden. Beim Daten-
+austausch mit der Creditreform übermittelt DEW21 den Namen des Kunden und
+seine Kontaktdaten. Weitere Informationen zur Datenverarbeitung bei Creditre-
+form können dem ausführlichen Merkblatt Creditreform-Informationen“ gemäß
+Art. 14 EU-DSGVO entnommen oder unter www.creditreform.de/dortmund/da-
+tenschutz eingesehen werden.
+
+22.5 Eine Offenlegung bzw. Übermittlung der personenbezogenen Daten des
+Kunden erfolgt – im Rahmen der in Ziff. 22.4 genannten Zwecke – ausschließlich
+gegenüber folgenden Empfängern bzw. Kategorien von Empfängern: DONETZ,
+Dienstleister für Werbung/Marketing, Servicedienstleister.
+
+22.6 Eine Übermittlung der personenbezogenen Daten an oder in Drittländer oder
+an internationale Organisationen erfolgt nicht.
+
+22.7 Die personenbezogenen Daten des Kunden werden zu den unter Ziff. 22.4
+genannten Zwecken so lange gespeichert, wie dies für die Erfüllung dieser Zwe-
+cke erforderlich ist. Zum Zwecke der Direktwerbung und der Marktforschung
+werden die personenbezogenen Daten des Kunden so lange gespeichert, wie ein
+überwiegendes rechtliches Interesse von DEW21 an der Verarbeitung nach Maß-
+gabe der einschlägigen rechtlichen Bestimmungen besteht, längstens jedoch für
+eine Dauer von 12 Monaten über das Vertragsende hinaus.
+
+22.8 Der Kunde hat gegenüber DEW21 Rechte auf Auskunft über seine gespei-
+cherten personenbezogenen Daten (Art. 15 DSGVO); Berichtigung der Daten,
+wenn sie fehlerhaft, veraltet oder sonst wie unrichtig sind (Art. 16 DSGVO); Lö-
+schung, wenn die Speicherung unzulässig ist, der Zweck der Verarbeitung erfüllt
+und die Speicherung daher nicht mehr erforderlich ist oder der Kunde eine erteil-
+te Einwilligung zur Verarbeitung bestimmter personenbezogener Daten widerru-
+fen hat (Art. 17 DSGVO); Einschränkung der Verarbeitung, wenn eine der in Art.
+18 Abs. 1 lit. a) bis d) DSGVO genannten Voraussetzungen gegeben ist (Art. 18
+DSGVO), Datenübertragbarkeit der vom Kunden bereitgestellten, ihn betreffen-
+den personenbezogenen Daten (Art. 20 DSGVO), Recht auf Widerruf einer erteil-
+ten Einwilligung, wobei der Widerruf die Rechtmäßigkeit der bis dahin aufgrund
+der Einwilligung erfolgten Verarbeitung nicht berührt (Art. 7 Abs. 3 DSGVO) und
+Recht auf Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO).
+Der Kunde hat gemäß Art. 22 Abs. 1 DSGVO das Recht, nicht einer ausschließlich
+auf einer automatisierten Verarbeitung – einschließlich eines evtl. Profiling – be-
+ruhenden Entscheidung unterworfen zu werden es sei denn, er willigt in die Ver-
+arbeitung ein, die Verarbeitung ist gesetzlich vorgeschrieben oder vertraglich er-
+forderlich.
+Der Kunde kann der Verarbeitung seiner personenbezogenen Daten für Zwecke
+der Direktwerbung und/oder der Marktforschung gegenüber DEW21 ohne Anga-
+be von Gründen jederzeit widersprechen. DEW21 wird die personenbezogenen
+Daten nach dem Eingang des Widerspruchs nicht mehr für die Zwecke der Direkt-
+werbung und/oder Marktforschung verarbeiten und die Daten löschen, wenn
+eine Verarbeitung nicht zu anderen Zwecken (beispielsweise zur Erfüllung des
+Vertrages) erforderlich ist. Auch anderen Verarbeitungen, die DEW21 auf ein be-
+rechtigtes Interesse i. S. d. Art. 6 Abs. 1 lit. f) DSGVO stützt (beispielsweise Über-
+mittlungen von Daten zum nicht vertragsgemäßen oder betrügerischen Verhal-
+ten des Kunden an Auskunfteien), kann der Kunde gegenüber DEW21 aus
+Gründen, die sich aus der besonderen Situation des Kunden ergeben, jederzeit
+unter Angabe dieser Gründe widersprechen. DEW21 wird die personenbezoge-
+nen Daten im Falle eines begründeten Widerspruchs grundsätzlich nicht mehr
+für die betreffenden Zwecke verarbeiten und die Daten löschen, es sei denn, er
+kann zwingende Gründe für die Verarbeitung nachweisen, die die Interessen,
+Rechte und Freiheiten des Kunden überwiegen, oder die Verarbeitung dient der
+Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.
+Der Widerspruch ist zu richten an: Dortmunder Energie- und Wasserversorgung
+GmbH, Abteilung VPK, Günter-Samtlebe-Platz 1, 44135 Dortmund, Telefon
+0231.22 22 21 21, Fax 0231.544 30 02 oder per E-Mail an: widerruf@dew21.de.
+
+22.9 Verarbeitet DEW21 personenbezogene Daten von Mitarbeitern des Kunden,
+verpflichtet sich der Kunde, seine Mitarbeiter darüber zu informieren, dass
+DEW21 für die Dauer des Energieliefervertrages die folgenden Kategorien perso-
+nenbezogener Daten der Mitarbeiter zum Zwecke der Erfüllung des Energieliefer-
+vertrages verarbeitet: Kontaktdaten (z. B.: Name, E-Mail-Adresse, Telefonnum-
+mer), Daten zur Stellenbezeichnung. Der Kunde informiert die betroffenen
+Mitarbeiter darüber, dass die Verarbeitung der benannten Kategorien von perso-
+nenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. b) DSGVO erfolgt. Au-
+ßerdem teilt er den betroffenen Mitarbeitern die Kontaktdaten von DEW21 als
+Verantwortlichem sowie des Datenschutzbeauftragten von DEW21 mit.
+
+23. Streitbeteiligungsverfahren, Verbrauchsinformationen und
+Online-Streitbeilegung
+
+23.1 Zur Beilegung von Streitigkeiten zwischen DEW21 und einem Kunden, der
+Verbraucher im Sinne des § 13 BGB ist, über den Gegenstand dieses Vertrages
+kann dieser Kunde, soweit DEW21 die zugrunde liegende Beschwerde des Kun-
+den nicht innerhalb einer Frist von vier Wochen ab Zugang bei DEW21 (Verbrau-
+cherbeschwerden sind zu richten an: Dortmunder Energie- und Wasserversor-
+gung GmbH, Günter-Samtlebe-Platz 1, 44135 Dortmund, Telefon 0231 22 22 21
+21 / Fax 0231.544-1130 / E-Mail: beschwerde@dew21.de) beantwortet oder der
+Beschwerde abgeholfen hat, zur außergerichtlichen Streitbeilegung die Schlich-
+tungsstelle Energie e. V. (die Kontaktdaten der Schlichtungsstelle sind derzeit:
+Friedrichstr. 133, 10117 Berlin, Telefon 030.2757240-0, Fax 030.2757240-69, In-
+ternet: www.schlichtungsstelle-energie.de, E-Mail: info@schlichtungsstelle-ener-
+gie.de) anrufen. DEW21 ist verpflichtet, an dem Verfahren bei der Schlichtungs-
+stelle teilzunehmen.
+Das Recht des Kunden oder der DEW21, die Gerichte anzurufen oder ein anderes
+Verfahren nach dem Energiewirtschaftsgesetz zu beantragen, bleibt unberührt.
+Sofern wegen eines Anspruchs, der durch ein Schlichtungsverfahren betroffen
+ist, ein Mahnverfahren eingeleitet wurde, soll der das Mahnverfahren betreiben-
+de Beteiligte auf Veranlassung der Schlichtungsstelle das Ruhen des Mahnver-
+fahrens bewirken.
+
+23.2 Allgemeine Informationen zu Verbraucherrechten sind erhältlich über den
+Verbraucherservice der Bundesnetzagentur für den Bereich Elektrizität und Gas,
+Postfach 8001, 53105 Bonn, Telefon 030.22480-500 oder 01805.101000 (Mo - Fr
+9 - 15 Uhr), Fax 030.22480-323, E-Mail: verbraucherservice-energie@bnetza.de.
+23.3 Informationen zur Online-Streitbeilegung: Die EU-Kommission hat eine In-
+ternetplattform zur Online-Beilegung von Streitigkeiten (sog. „OS-Plattform“) ge-
+schaffen. Die OS-Plattform dient als Anlaufstelle zur außergerichtlichen Beile-
+gung von Streitigkeiten betreffend vertragliche Verpflichtungen, die aus
+Online-Kaufverträgen erwachsen. Sie können die OS-Plattform unter dem folgen-
+den Link erreichen: http://ec.europa.eu/consumers/odr.
+
+24. Allgemeine Informationen nach dem Energiedienstleistungsgesetz
+
+Im Zusammenhang mit einer effizienteren Energienutzung durch Endkunden
+wird bei der Bundesstelle für Energieeffizienz eine Liste geführt, in der Energie-
+dienstleister, Anbieter von Energieaudits und Anbieter von Energieeffizienzmaß-
+nahmen aufgeführt sind. Weiterführende Informationen zu der sogenannten An-
+bieterliste und den Anbietern selbst erhalten Sie unter www.bfee-online.de. Sie
+können sich zudem bei der Deutschen Energieagentur über das Thema Energie-
+effizienz umfassend informieren. Weitere Informationen erhalten Sie unter
+www.dena.de/themen-projekte/energieeffizienz/.

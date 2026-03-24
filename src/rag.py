@@ -1,8 +1,8 @@
 import os
 import time
 from langchain_community.retrievers import BM25Retriever
-from langchain_classic.retrievers import EnsembleRetriever
-from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+from langchain.retrievers import EnsembleRetriever
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
@@ -23,7 +23,7 @@ _ENSEMBLE_CACHE = {
 model_name = "BAAI/bge-m3"
 model_kwargs = {"device": "cpu"}
 encode_kwargs = {"normalize_embeddings": True}
-embeddings = HuggingFaceBgeEmbeddings(
+embeddings = HuggingFaceEmbeddings(
     model_name=model_name, model_kwargs=model_kwargs, encode_kwargs=encode_kwargs
 )
 
@@ -172,26 +172,35 @@ def _contextualize_query(question: str, chat_history: list) -> str:
     except Exception:
         return question
 
-def _expand_query(question: str) -> str:
-    """Expand query with synonyms for better retrieval."""
-    prompt = (
-        f"Expand this query with legal and contractual synonyms. "
-        f"Examples: postalcode -> zip code, zip, PLZ, 44135, address; "
-        f"late payment -> default, overdue, payment default, reminder fee, Mahnung, Verzug, collection costs. "
-        f"Output ONLY the comma-separated keywords including the original query. Original: {question}"
-    )
+def _expand_query(question: str, lang: str = "en") -> str:
+    """Expand query with synonyms for better retrieval, respecting the language."""
+    if lang == "de":
+        prompt = (
+            f"Erweitere diese Anfrage mit rechtlichen und vertraglichen Synonymen auf DEUTSCH. "
+            f"Beispiele: Postleitzahl -> zip code, zip, PLZ, 44135, Adresse; "
+            f"Zahlungsverzug -> default, overdue, payment default, Mahngebühr, Mahnung, Verzug, Inkassokosten. "
+            f"Gib NUR die durch Kommata getrennten Schlüsselwörter einschließlich der Originalanfrage aus. Original: {question}"
+        )
+    else:
+        prompt = (
+            f"Expand this query with legal and contractual synonyms in English. "
+            f"Examples: postalcode -> zip code, zip, PLZ, 44135, address; "
+            f"late payment -> default, overdue, payment default, reminder fee, Mahnung, Verzug, collection costs. "
+            f"Output ONLY the comma-separated keywords including the original query. Original: {question}"
+        )
     try:
         keywords = llm.invoke(prompt).content.strip().strip('"')
         return f"{question}, {keywords}"
     except Exception:
         return question
 
-def _decompose_query(question: str) -> list:
-    """Decompose a complex query into simpler sub-queries. If simple, returns a list with just the original query."""
+def _decompose_query(question: str, lang: str = "en") -> list:
+    """Decompose a complex query into simpler sub-queries, respecting the language."""
+    lang_instr = "in German" if lang == "de" else "in English"
     prompt = (
         f"Analyze the following question: \"{question}\"\n"
-        "If it is a single, simple question, output exactly that question. "
-        "If it is a complex question asking for multiple different things (e.g., using 'and'), break it down into up to 3 simple, standalone sub-queries. "
+        f"If it is a single, simple question, output exactly that question {lang_instr}. "
+        f"If it is a complex question asking for multiple different things (e.g., using 'and'), break it down into up to 3 simple, standalone sub-queries {lang_instr}. "
         "Output each sub-query on a new line, removing any list numbers or bullet points. "
         "Do not output anything else."
     )
@@ -214,11 +223,11 @@ def ask(question, chat_history=None, lang="en"):
         retrieval_query = _contextualize_query(question, chat_history)
 
     # 1.1. EXPAND query for keywords
-    expanded_query = _expand_query(retrieval_query)
+    expanded_query = _expand_query(retrieval_query, lang=lang)
     print(f"🔍 Expanded Query: {expanded_query}")
 
     # 1.5. DECOMPOSE complex queries to prevent semantic averaging
-    sub_queries = _decompose_query(expanded_query)
+    sub_queries = _decompose_query(expanded_query, lang=lang)
     print(f"🧩 Sub-queries broken down: {sub_queries}")
 
     # 2. RETRIEVE Hybrid Documents for EACH sub-query and deduplicate

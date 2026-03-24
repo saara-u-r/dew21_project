@@ -39,6 +39,8 @@ if "sources" not in st.session_state:
     st.session_state.sources = []
 if "lang" not in st.session_state:
     st.session_state.lang = "en"
+if "generating" not in st.session_state:
+    st.session_state.generating = False
 
 t = UI[st.session_state.lang]
 
@@ -202,13 +204,53 @@ div[data-testid="stButton"] button:hover {
 /* ===== SPINNER ===== */
 .stSpinner p { color: #888 !important; font-size: 14px !important; }
 
-/* ===== SELECTBOX (Language) ===== */
-div[data-testid="stSelectbox"] > div {
+/* ===== POPOVER (Language Dropdown) ===== */
+div[data-testid="stPopover"] button {
     background: #161616 !important;
     border: 1px solid #2a2a2a !important;
     border-radius: 8px !important;
     color: #c0c0c0 !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+    width: 100% !important;
+}
+div[data-testid="stPopover"] button:hover {
+    border-color: #F57C00 !important;
+    color: #F57C00 !important;
+}
+div[data-testid="stPopoverContent"] button {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 8px 12px !important;
+    color: #fff !important;
+}
+div[data-testid="stPopoverContent"] button:hover {
+    background: #1f1400 !important;
+    color: #F57C00 !important;
+}
+/* ===== HIDE STREAMLIT CHROME & DIMMING ===== */
+div[data-testid="stAppViewBlockContainer"] > div:last-child {
+    background: transparent !important;
+}
+[data-testid="stAppViewBlockContainer"] {
+    opacity: 1 !important; /* Forces full opacity even during run */
+}
+.stActionButton { display: none !important; }
+
+/* Custom Pulse for Searching */
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+.searching-pulse {
+    animation: pulse 1.5s infinite ease-in-out;
+    color: #F57C00;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -218,17 +260,13 @@ col_logo, col_spacer, col_lang, col_clear = st.columns([3, 2, 1, 1.4])
 with col_logo:
     st.markdown('<div class="nav-logo">DEW<span>21</span></div>', unsafe_allow_html=True)
 with col_lang:
-    new_lang = st.selectbox(
-        "lang",
-        options=["en", "de"],
-        index=0 if st.session_state.lang == "en" else 1,
-        format_func=lambda x: "EN 🌐" if x == "en" else "DE 🌐",
-        label_visibility="collapsed"
-    )
-    if new_lang != st.session_state.lang:
-        st.session_state.lang = new_lang
-        t = UI[new_lang]
-        st.rerun()
+    with st.popover(f"{st.session_state.lang.upper()} 🌐", use_container_width=True):
+        if st.button("English 🇺🇸", use_container_width=True):
+            st.session_state.lang = "en"
+            st.rerun()
+        if st.button("Deutsch 🇩🇪", use_container_width=True):
+            st.session_state.lang = "de"
+            st.rerun()
 with col_clear:
     if st.button(t["clear"], use_container_width=True):
         st.session_state.messages = []
@@ -266,30 +304,43 @@ with chat_container:
                             st.caption(f'"{h["text"]}"')
                             st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
 
-# ── Input
-user_query = st.chat_input(t["placeholder"])
+# ── Input (Disabled during generation)
+user_query = st.chat_input(t["placeholder"], disabled=st.session_state.generating)
 
 if hasattr(st.session_state, "example_trigger") and st.session_state.example_trigger:
     user_query = st.session_state.example_trigger
     del st.session_state.example_trigger
 
 if user_query:
+    # ── Immediate state update
+    st.session_state.generating = True
     st.session_state.messages.append({"role": "user", "content": user_query})
     st.session_state.sources.append(None)
+    st.rerun()
 
-    with chat_container.chat_message("user", avatar="🧑"):
-        st.markdown(user_query)
-
+# ── Processing the last message if needed
+if st.session_state.messages and st.session_state.messages[-1]["role"] == "user" and st.session_state.generating:
+    last_query = st.session_state.messages[-1]["content"]
+    
     with chat_container.chat_message("assistant", avatar="⚡"):
-        with st.spinner(t["thinking"]):
-            res = ask(user_query, chat_history=st.session_state.messages[:-1], lang=st.session_state.lang)
-            st.markdown(res["answer"])
-            highlights = res.get("highlights", [])
-            if highlights:
-                with st.expander("📎 View Citations"):
-                    for h in highlights:
-                        st.caption(f'"{h["text"]}"')
-                        st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
+        # ChatGPT-like Status Step
+        status = st.status(t["thinking"], expanded=True)
+        with status:
+            st.write("🔍 Analyzing document repository...")
+            st.write("🧩 Decomposing compound queries...")
+            st.write("📑 Ranking legal clauses...")
+            res = ask(last_query, chat_history=st.session_state.messages[:-1], lang=st.session_state.lang)
+            status.update(label="Ready", state="complete", expanded=False)
+        
+        st.markdown(res["answer"])
+        highlights = res.get("highlights", [])
+        if highlights:
+            with st.expander("📎 View Citations"):
+                for h in highlights:
+                    st.caption(f'"{h["text"]}"')
+                    st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
 
     st.session_state.messages.append({"role": "assistant", "content": res["answer"]})
     st.session_state.sources.append({"highlights": highlights})
+    st.session_state.generating = False
+    st.rerun()

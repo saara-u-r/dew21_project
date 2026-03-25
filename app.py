@@ -39,6 +39,10 @@ if "sources" not in st.session_state:
     st.session_state.sources = []
 if "lang" not in st.session_state:
     st.session_state.lang = "en"
+if "mode" not in st.session_state:
+    st.session_state.mode = "Standard"
+if "context" not in st.session_state:
+    st.session_state.context = "All Docs"
 if "generating" not in st.session_state:
     st.session_state.generating = False
 
@@ -252,6 +256,42 @@ div[data-testid="stAppViewBlockContainer"] > div:last-child {
     font-weight: 500;
     margin-bottom: 20px;
 }
+
+/* THE UNIFIED COMMAND BAR */
+.controls-container {
+    position: fixed !important;
+    bottom: 90px !important;
+    left: 20px !important; /* Left-aligned like ChatGPT tools */
+    z-index: 1000000 !important;
+}
+
+div[data-testid="stPopover"] button {
+    background: rgba(15, 15, 15, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 0 16px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+    height: 38px !important;
+}
+
+div[data-testid="stPopover"] button:hover {
+    background: rgba(40, 40, 40, 0.9) !important;
+    border-color: #F57C00 !important;
+    color: #F57C00 !important;
+    box-shadow: 0 0 15px rgba(245, 124, 0, 0.1) !important;
+}
+
+/* Fix for the popover content to match theme */
+div[data-testid="stPopoverContent"] {
+    background: #141414 !important;
+    border: 1px solid #2a2a2a !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -304,8 +344,26 @@ with chat_container:
                             st.caption(f'"{h["text"]}"')
                             st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
 
-# ── Input (Disabled during generation)
 user_query = st.chat_input(t["placeholder"], disabled=st.session_state.generating)
+
+# --- UNIFIED SETTINGS (MODE + CONTEXT) ---
+st.markdown('<div class="controls-container">', unsafe_allow_html=True)
+mode_icons = {"Simplified": "📄", "Standard": "⚖️", "Expert": "🎓"}
+ctx_icons = {"All Docs": "📚", "Electricity": "⚡", "Gas": "🔥", "SCHUFA": "🏦", "Creditreform": "💳"}
+
+with st.popover(f"⚙️ {st.session_state.mode} • {st.session_state.context}", use_container_width=False):
+    st.write("**Target Mode**")
+    for m in ["Simplified", "Standard", "Expert"]:
+        if st.button(f"{mode_icons[m]} {m}", key=f"btn_mode_{m}", use_container_width=True):
+            st.session_state.mode = m
+            st.rerun()
+    st.write("---")
+    st.write("**Document Context**")
+    for c in ["All Docs", "Electricity", "Gas", "SCHUFA", "Creditreform"]:
+        if st.button(f"{ctx_icons[c]} {c}", key=f"btn_ctx_{c}", use_container_width=True):
+            st.session_state.context = c
+            st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
 if hasattr(st.session_state, "example_trigger") and st.session_state.example_trigger:
     user_query = st.session_state.example_trigger
@@ -323,24 +381,36 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
     last_query = st.session_state.messages[-1]["content"]
     
     with chat_container.chat_message("assistant", avatar="⚡"):
-        # ChatGPT-like Status Step
-        status = st.status(t["thinking"], expanded=True)
-        with status:
-            st.write("🔍 Analyzing document repository...")
-            st.write("🧩 Decomposing compound queries...")
-            st.write("📑 Ranking legal clauses...")
-            res = ask(last_query, chat_history=st.session_state.messages[:-1], lang=st.session_state.lang)
-            status.update(label="Ready", state="complete", expanded=False)
+        # Use st.write_stream for real-time feedback
+        from src.rag import ask_stream
         
-        st.markdown(res["answer"])
-        highlights = res.get("highlights", [])
-        if highlights:
-            with st.expander("📎 View Citations"):
-                for h in highlights:
-                    st.caption(f'"{h["text"]}"')
-                    st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
+        # Display a small badge while initializing
+        with st.empty():
+            st.markdown('<div class="searching-pulse">🔍 Searching documents...</div>', unsafe_allow_html=True)
+            
+            # Stream the answer
+            retrieved_docs = []
+            assistant_content = st.write_stream(
+                ask_stream(
+                    last_query, 
+                    chat_history=st.session_state.messages[:-1], 
+                    lang=st.session_state.lang, 
+                    retrieved_docs_out=retrieved_docs,
+                    mode=st.session_state.mode,
+                    doc_filter=st.session_state.context
+                )
+            )
+            
+        highlights = []
+        for d in retrieved_docs:
+            source = d.metadata.get("doc_name", "Unknown Document")
+            # Create a short snippet
+            snippet = d.page_content.replace('\n', ' ')
+            if len(snippet) > 150:
+                snippet = snippet[:147] + "..."
+            highlights.append({"text": snippet, "source": source})
 
-    st.session_state.messages.append({"role": "assistant", "content": res["answer"]})
+    st.session_state.messages.append({"role": "assistant", "content": assistant_content})
     st.session_state.sources.append({"highlights": highlights})
     st.session_state.generating = False
     st.rerun()

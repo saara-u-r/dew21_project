@@ -14,18 +14,23 @@ FAISS_PATH_EN = os.path.join(BASE_DIR, "faiss_index")
 FAISS_PATH_DE = os.path.join(BASE_DIR, "faiss_index_de")
 
 # --- CACHE ---
-_ENSEMBLE_CACHE = {
-    "en": None,
-    "de": None
-}
+# Cache is initialized below after FAISS loads
 
 # --- EMBEDDINGS (bge-m3 Multilingual) ---
 model_name = "BAAI/bge-m3"
-model_kwargs = {"device": "cpu"}
+# Use 'mps' for Mac Apple Silicon, fallback to 'cpu'
+import torch
+device = "mps" if torch.backends.mps.is_available() else "cpu"
+model_kwargs = {"device": device}
 encode_kwargs = {"normalize_embeddings": True}
 embeddings = HuggingFaceEmbeddings(
     model_name=model_name, model_kwargs=model_kwargs, encode_kwargs=encode_kwargs
 )
+
+# WARMUP EMBEDDINGS (Eliminates ~4.5s cold-start spike)
+print("Warming up embeddings...", flush=True)
+embeddings.embed_query("warmup")
+print("Embeddings ready.", flush=True)
 
 # --- VECTOR STORE LOADERS ---
 def load_faiss(path):
@@ -39,18 +44,13 @@ def load_faiss(path):
 db_en = load_faiss(FAISS_PATH_EN)
 db_de = load_faiss(FAISS_PATH_DE)
 
-# --- HYBRID RETRIEVAL (ENSEMBLE) ---
-def get_ensemble_retriever(lang="en"):
-    global _ENSEMBLE_CACHE
-    if _ENSEMBLE_CACHE[lang] is not None:
-        return _ENSEMBLE_CACHE[lang]
-        
-    db = db_en if lang == "en" else db_de
+# PRECOMPUTE ENSEMBLE RETRIEVERS (BM25 + FAISS) at boot
+print("Precomputing BM25 indices...", flush=True)
+def _build_ensemble(db):
     if not db:
         return None
-        
-    # 1. Vector Retriever (Semantic) — k=8 for better coverage
-    faiss_retriever = db.as_retriever(search_kwargs={"k": 8})
+    # 1. Vector Retriever (Semantic) — k=10
+    faiss_retriever = db.as_retriever(search_kwargs={"k": 10})
     
     # 2. Extract context for BM25
     collection = db.docstore._dict
@@ -61,61 +61,77 @@ def get_ensemble_retriever(lang="en"):
     if not documents:
         return None
         
-    # 3. BM25 Retriever (Sparse/Keyword) — k=8 for better coverage
+    # 3. BM25 Retriever (Sparse/Keyword) — k=10
     bm25_retriever = BM25Retriever.from_documents(documents)
-    bm25_retriever.k = 8
+    bm25_retriever.k = 10
     
-    # 4. Ensemble (Hybrid Fusion: 40% BM25, 60% FAISS)
-    ensemble_retriever = EnsembleRetriever(
+    # 4. Ensemble (60% FAISS, 40% BM25)
+    return EnsembleRetriever(
         retrievers=[bm25_retriever, faiss_retriever],
         weights=[0.4, 0.6]
     )
-    _ENSEMBLE_CACHE[lang] = ensemble_retriever
-    return ensemble_retriever
 
-def hybrid_retrieve(query, lang="en"):
+_ENSEMBLE_CACHE = {
+    "en": _build_ensemble(db_en),
+    "de": _build_ensemble(db_de)
+}
+print("BM25 indices ready.", flush=True)
+
+# --- HYBRID RETRIEVAL (ENSEMBLE) ---
+def get_ensemble_retriever(lang="en"):
+    return _ENSEMBLE_CACHE.get(lang)
+
+async def ahybrid_retrieve(query, lang="en", doc_filter=None):
     retriever = get_ensemble_retriever(lang)
-    if retriever:
-        # The ensemble retriever handles weights and deduplication natively
-        return retriever.invoke(query)
-    return []
+    if not retriever:
+        return []
+        
+    docs = await retriever.ainvoke(query)
+    
+    if doc_filter and doc_filter != "All Docs":
+        # Simplified filtering by checking if doc_filter is in the metadata source name
+        filtered = [d for d in docs if doc_filter.lower() in d.metadata.get("source", "").lower()]
+        return filtered
+    return docs
 
 # --- LLM ---
-llm = ChatOllama(model="qwen2.5:7b", temperature=0)
+# ChatOllama is now instantiated per-request to prevent asyncio loop conflicts across threads.
 
-# --- PROMPT CONFIG ---
+# --- PROMPT MODES ---
+MODE_PROMPTS = {
+    "Simplified": {
+        "en": "Use simple, non-legal language. Avoid jargon. Explain concepts as if to a layman or customer. Keep it friendly and easy to understand.",
+        "de": "Verwende einfache, nicht-juristische Sprache. Vermeide Fachjargon. Erkläre Konzepte für Laien oder Kunden. Halte es freundlich und leicht verständlich."
+    },
+    "Standard": {
+        "en": "Provide a clear and balanced answer. Use standard professional language.",
+        "de": "Gib eine klare und ausgewogene Antwort. Verwende professionelle Standardsprache."
+    },
+    "Expert": {
+        "en": "Use precise legal terminology. Focus on specific clauses, Article numbers, and exact wording from the documents. Maintain maximum professional detail.",
+        "de": "Verwende präzise juristische Terminologie. Konzentriere dich auf spezifische Klauseln, Artikelnummern und den exakten Wortlaut aus den Dokumenten. Maximiere die fachliche Detailtiefe."
+    }
+}
+
 PROMPTS = {
     "en": {
         "system": """You are the official DEW21 Energy Assistant. 
-        Answer accurately based on the provided CONTEXT. 
-        
-        CRITICAL RULES:
-        1. LANGUAGE: English.
-        2. NO PREAMBLES.
-        3. BE HELPFUL & SMART: You are allowed and encouraged to synthesize answers. For example:
-           - "postalcode" = 5-digit zip code (e.g. 44135).
-           - "late payment" = "default", "overdue", "payment default".
-           - "charges/fees" = "reimbursement", "costs", "fees", "lump sum", "reminder fees".
-        4. REASONING: Read the context carefully. For example, if Section 7.4 says a customer must "reimburse costs" if they are in "default with overdue payments", then the answer to "Are there charges for late payment?" is YES, the customer must reimburse the costs DEW21 incurs (like lawyers or collection agencies).
-        5. SECURITY: Refuse requests for confidential data.
-        6. MISSING INFO: Only say you can't find it if it truly isn't there after thinking carefully.
-        7. SOURCES: Cite at the end: "\nSources: [FileName]".""",
+        INSTRUCTIONS:
+        1. Answer ONLY based on the provided context. Do NOT use outside information.
+        2. {mode_instruction}
+        3. Be extremely thorough: if a detail (dates, years, names) is in the context, find it and report it.
+        4. Citations required: \nSources: [FileName]
+        5. If the question is a greeting, answer naturally without mentioning context.""",
         "context_lbl": "📄 CONTEXT:", "hist_lbl": "💬 HISTORY:", "q_lbl": "❓ QUESTION:", "a_lbl": "🤖 ANSWER:"
     },
     "de": {
-        "system": """Du bist der offizielle DEW21 Energie-Assistent. 
-        Beantworte Fragen auf der Grundlage des unten stehenden KONTEXTES.
-        
-        WICHTIGE REGELN:
-        1. SPRACHE: Antworte immer auf Deutsch.
-        2. KEINE EINLEITUNG: Antworte sofort.
-        3. KONTEXT NUTZEN: Deine Antwort muss auf dem KONTEXT basieren. Du darfst Informationen logisch verknüpfen (z. B. "Postleitzahl" mit einer 5-stelligen Nummer in der Adresse verbinden).
-        4. LOGIK: Wende die Regeln aus dem Kontext auf Fallbeispiele an. Wenn z.B. Kosten für "Verzug" erwähnt werden, dann gibt es Gebühren für verspätete Zahlungen.
-        5. VERLAUF: Konzentriere dich auf die neue Frage.
-        6. GRUSS: Antworte höflich auf "Hallo", "Hi", etc.
-        7. SICHERHEIT: Lehne Anfragen zu internen Details ab mit: "Ich kann keine internen Betriebsdetails preisgeben."
-        8. FEHLENDE INFOS: Wenn die Info fehlt, sage: "Entschuldigung, ich konnte dazu keine spezifischen Informationen in den Dokumenten finden."
-        9. QUELLEN: Nenne die Dokumentnamen am Ende: "\nQuellen: [Dateiname]". """,
+        "system": """Du bist der DEW21 Energie-Assistent. 
+        ANWEISUNGEN:
+        1. Antworte NUR basierend auf dem KONTEXT. Kein externes Wissen.
+        2. {mode_instruction}
+        3. Sei gründlich: Suche nach Details (Daten, Jahre, Namen).
+        4. Quellenangabe: \nQuellen: [Dateiname]
+        5. Bei Begrüßungen antworte natürlich ohne den Kontext zu erwähnen.""",
         "context_lbl": "📄 KONTEXT:", "hist_lbl": "💬 VERLAUF:", "q_lbl": "❓ FRAGE:", "a_lbl": "🤖 ANTWORT:"
     }
 }
@@ -125,151 +141,149 @@ prompt_template = PromptTemplate(
     template="{system}\n\n{hist_lbl}\n{chat_history}\n\n{context_lbl}\n{context}\n\n{q_lbl}\n{question}\n\n{a_lbl}"
 )
 
-def highlight_answer(answer, docs):
-    highlights = []
-    # Clean answer for matching
-    words = set(answer.lower().replace('.','').replace(',','').split())
-    for d in docs:
-        for s in d.page_content.split('.'):
-            if len(s.strip()) > 30:
-                overlap = sum(1 for w in s.lower().split() if w in words)
-                if overlap > 5:
-                    highlights.append({"text": s.strip() + ".", "source": d.metadata.get("doc_name", d.metadata.get("source", "Doc"))})
-                    if len(highlights) >= 2: return highlights
-    return highlights
+# --- OPTIMIZED QUERY ANALYSIS ---
+async def _aanalyze_query(llm, question: str, chat_history: list, lang: str = "en") -> dict:
+    """Fast query heuristic to skip unnecessary LLM calls."""
+    q_words = question.lower().split()
+    
+    # 1. SIMPLE HEURISTICS (Skip LLM if simple)
+    is_simple = len(q_words) <= 5 and not any(w in ["it", "them", "those", "this", "that"] for w in q_words)
+    if not chat_history and is_simple:
+        return {"query": question, "sub_queries": [question]}
 
-def _is_vague_followup(question: str) -> bool:
-    """Detect short/vague follow-up questions that need context to be searchable."""
-    q = question.strip().lower()
-    vague_starters = [
-        "can you give", "give me an example", "give an example", "example",
-        "explain more", "tell me more", "more detail", "elaborate",
-        "what about", "and what", "how about", "what does that mean",
-        "can you clarify", "clarify", "expand on"
-    ]
-    return len(question.split()) <= 6 or any(q.startswith(s) for s in vague_starters)
+    # 2. FOLLOW-UP DETECTION (Rule-based first)
+    followup_starters = ["what about", "how about", "why", "and", "give me more", "explain", "why?", "example"]
+    is_followup = any(question.lower().startswith(s) for s in followup_starters) or len(q_words) < 3
 
-def _contextualize_query(question: str, chat_history: list) -> str:
-    """Rewrite a vague follow-up into a standalone query using the last assistant turn."""
-    # Find the last assistant message
-    last_assistant = ""
-    for msg in reversed(chat_history):
-        if msg["role"] == "assistant":
-            last_assistant = msg["content"][:300]
-            break
-    if not last_assistant:
-        return question
-    # Use LLM to rewrite
-    rewrite_prompt = (
-        f"The user previously received this answer:\n\"{last_assistant}\"\n\n"
-        f"Now the user asks: \"{question}\"\n\n"
-        "Rewrite the user's follow-up as a single, self-contained search query that captures what they want to know. "
-        "Output ONLY the rewritten query, nothing else."
-    )
-    try:
-        rewritten = llm.invoke(rewrite_prompt).content.strip().strip('"').strip("'")
-        return rewritten if rewritten else question
-    except Exception:
-        return question
+    if not is_followup and not (" and " in question.lower()):
+        return {"query": question, "sub_queries": [question]}
 
-def _expand_query(question: str, lang: str = "en") -> str:
-    """Expand query with synonyms for better retrieval, respecting the language."""
-    if lang == "de":
-        prompt = (
-            f"Erweitere diese Anfrage mit rechtlichen und vertraglichen Synonymen auf DEUTSCH. "
-            f"Beispiele: Postleitzahl -> zip code, zip, PLZ, 44135, Adresse; "
-            f"Zahlungsverzug -> default, overdue, payment default, Mahngebühr, Mahnung, Verzug, Inkassokosten. "
-            f"Gib NUR die durch Kommata getrennten Schlüsselwörter einschließlich der Originalanfrage aus. Original: {question}"
-        )
-    else:
-        prompt = (
-            f"Expand this query with legal and contractual synonyms in English. "
-            f"Examples: postalcode -> zip code, zip, PLZ, 44135, address; "
-            f"late payment -> default, overdue, payment default, reminder fee, Mahnung, Verzug, collection costs. "
-            f"Output ONLY the comma-separated keywords including the original query. Original: {question}"
-        )
-    try:
-        keywords = llm.invoke(prompt).content.strip().strip('"')
-        return f"{question}, {keywords}"
-    except Exception:
-        return question
-
-def _decompose_query(question: str, lang: str = "en") -> list:
-    """Decompose a complex query into simpler sub-queries, respecting the language."""
-    lang_instr = "in German" if lang == "de" else "in English"
+    # 3. LLM ANALYSIS (Only for complex entries)
     prompt = (
-        f"Analyze the following question: \"{question}\"\n"
-        f"If it is a single, simple question, output exactly that question {lang_instr}. "
-        f"If it is a complex question asking for multiple different things (e.g., using 'and'), break it down into up to 3 simple, standalone sub-queries {lang_instr}. "
-        "Output each sub-query on a new line, removing any list numbers or bullet points. "
-        "Do not output anything else."
+        f"You are a search query optimizer for a DEW21 Energy Assistant RAG system.\n"
+        f"Decompose the user question into a standalone version and distinct sub-queries targeting different parts of our documentation (e.g., GTC, billing, data protection, liability).\n"
+        f"Language: {lang}\n"
+        f"User Question: {question}\n"
+        f"Context: {chat_history[-1]['content'][:200] if chat_history else 'Initial Query'}\n\n"
+        'Output strictly in valid JSON format:\n'
+        '{"query": "Refined standalone question", "sub_queries": ["specific search term 1", "specific search term 2"]}'
     )
+    
     try:
-        res = llm.invoke(prompt).content.strip()
-        sub_queries = [sq.strip('-*0123456789. ') for sq in res.split('\n') if sq.strip()]
-        if not sub_queries:
-            return [question]
-        return sub_queries
+        from json import loads
+        # Use a short timeout for expansion
+        resp = await llm.ainvoke(prompt)
+        return loads(resp.content.strip().replace('```json', '').replace('```', ''))
     except Exception:
-        return [question]
+        return {"query": question, "sub_queries": [question]}
+
+import asyncio
+import threading
+import queue
+
+async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None):
+    """Aggressively optimized streaming for instant feedback with mode & filter support."""
+    if chat_history is None: chat_history = []
+    
+    # Instantiate LLM within the async context
+    llm = ChatOllama(model="qwen2.5:7b", temperature=0)
+    
+    # 1. PARALLEL ANALYSIS & BASE RETRIEVE
+    base_retrieval_task = asyncio.create_task(ahybrid_retrieve(question, lang=lang, doc_filter=doc_filter))
+    
+    # Run the expensive LLM analysis concurrently!
+    analysis_task = asyncio.create_task(_aanalyze_query(llm, question, chat_history, lang=lang))
+    
+    analysis = await analysis_task
+    # Filter out the main question to avoid duplicate searching
+    sub_queries = [sq for sq in analysis.get("sub_queries", [question]) if sq.lower() != question.lower()][:3]
+    
+    extra_retrievals = []
+    if sub_queries:
+        extra_retrievals = await asyncio.gather(*[
+            ahybrid_retrieve(q, lang=lang, doc_filter=doc_filter) for q in sub_queries
+        ])
+        
+    base_docs = await base_retrieval_task
+    
+    # ROUND-ROBIN MERGE: Ensure sub-queries aren't drowned out by the base query
+    all_docs = []
+    seen = set()
+    
+    # Interleave results: 1st from base, 1st from each sub-query, then 2nd...
+    max_len = max([len(base_docs)] + [len(r) for r in extra_retrievals]) if extra_retrievals or base_docs else 0
+    
+    for i in range(max_len):
+        # Base query doc
+        if i < len(base_docs):
+            d = base_docs[i]
+            if d.page_content not in seen:
+                seen.add(d.page_content)
+                all_docs.append(d)
+        # Sub-query docs
+        for res_docs in extra_retrievals:
+            if i < len(res_docs):
+                d = res_docs[i]
+                if d.page_content not in seen:
+                    seen.add(d.page_content)
+                    all_docs.append(d)
+    
+    docs = all_docs[:15] # Increased to 15 for maximum coverage during presentation
+    
+    if retrieved_docs_out is not None:
+        retrieved_docs_out.extend(docs)
+        
+    if not docs:
+        yield "I'm sorry, no records found. Contact 0231 22 22 22 11."
+        return
+
+    # 2. PROMPT CONSTRUCTION WITH MODE
+    mode_instruction = MODE_PROMPTS.get(mode, MODE_PROMPTS["Standard"])[lang]
+    sys_prompt = PROMPTS[lang]["system"].format(mode_instruction=mode_instruction)
+    
+    ctx = "\n\n".join([f"[{d.metadata.get('source', 'Doc')}]\n{d.page_content}" for d in docs])
+    hist = ""
+    if chat_history:
+        # Mini-history for context
+        hist = f"User: {chat_history[-1]['content'][:150]}\nAssistant: {chat_history[-1]['content'][:150]}"
+
+    prompt = (
+        f"{sys_prompt}\n\n{ctx}\n\nHistory: {hist}\nQuestion: {question}\nAnswer:"
+    )
+
+    # 3. STREAMING
+    try:
+        async for chunk in llm.astream(prompt):
+            yield chunk.content
+    except Exception as e:
+        yield f"Backend Delay: {e}. Retrying..."
+
+def ask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None):
+    """Synchronous generator wrapper using threading and Queue to stream to Streamlit."""
+    q = queue.Queue()
+    
+    def _run_async():
+        async def exhaust():
+            try:
+                async for chunk in _aask_stream(question, chat_history, lang, retrieved_docs_out, mode, doc_filter):
+                    q.put(chunk)
+            except Exception as e:
+                q.put(f"Backend error: {e}")
+            finally:
+                q.put(None)  # Sentinel value signaling completion
+        asyncio.run(exhaust())
+        
+    threading.Thread(target=_run_async, daemon=True).start()
+    
+    while True:
+        chunk = q.get()
+        if chunk is None:
+            break
+        yield chunk
 
 def ask(question, chat_history=None, lang="en"):
-    if chat_history is None: chat_history = []
-    c = PROMPTS.get(lang, PROMPTS["en"])
-
-    # 1. CONTEXTUALIZE vague follow-up queries before retrieval
-    retrieval_query = question
-    if chat_history and _is_vague_followup(question):
-        retrieval_query = _contextualize_query(question, chat_history)
-
-    # 1.1. EXPAND query for keywords
-    expanded_query = _expand_query(retrieval_query, lang=lang)
-    print(f"🔍 Expanded Query: {expanded_query}")
-
-    # 1.5. DECOMPOSE complex queries to prevent semantic averaging
-    sub_queries = _decompose_query(expanded_query, lang=lang)
-    print(f"🧩 Sub-queries broken down: {sub_queries}")
-
-    # 2. RETRIEVE Hybrid Documents for EACH sub-query and deduplicate
-    all_docs = []
-    seen_contents = set()
-    
-    for sq in sub_queries:
-        sq_docs = hybrid_retrieve(sq, lang=lang)
-        for d in sq_docs:
-            if d.page_content not in seen_contents:
-                seen_contents.add(d.page_content)
-                all_docs.append(d)
-                
-    # Keep top 15 unique chunks across all sub-queries
-    docs = all_docs[:15]
-    
-    if not docs:
-        fallback = "I'm sorry, I couldn't find specific documents for your query. Please contact DEW21 service at 0231 22 22 22 11."
-        if lang == "de": fallback = "Es wurden keine passenden Dokumente gefunden. Bitte kontaktieren Sie DEW21 unter 0231 22 22 22 11."
-        return {"answer": fallback, "contexts": [], "sources": [], "highlights": []}
-    
-    # 2. FORMAT CONTEXT — add document name to each chunk to help LLM navigate
-    ctx_parts = []
-    for i, d in enumerate(docs, 1):
-        src = d.metadata.get('doc_name', d.metadata.get('source', 'Doc'))
-        ctx_parts.append(f"[Document Name: {src} | Chunk {i}]\n{d.page_content}")
-    ctx = "\n\n---\n\n".join(ctx_parts)
-    hist = "\n".join([f"{m['role']}: {m['content'][:150]}..." for m in chat_history[-4:]])
-    
-    # 3. INVOKE LLM
-    try:
-        f_prompt = prompt_template.format(
-            system=c["system"], context=ctx, question=question, chat_history=hist,
-            context_lbl=c["context_lbl"], hist_lbl=c["hist_lbl"], q_lbl=c["q_lbl"], a_lbl=c["a_lbl"]
-        )
-        ans = llm.invoke(f_prompt).content
-        
-        return {
-            "answer": ans,
-            "contexts": [d.page_content for d in docs],
-            "sources": [{"doc_name": d.metadata.get("doc_name", ""), "source": d.metadata.get("source", "")} for d in docs],
-            "highlights": highlight_answer(ans, docs)
-        }
-    except Exception as e:
-        return {"answer": f"Backend Error: {e}", "contexts": [], "sources": [], "highlights": []}
+    """Static version using the same logic."""
+    full_answer = ""
+    for chunk in ask_stream(question, chat_history, lang):
+        full_answer += chunk
+    return {"answer": full_answer, "contexts": [], "sources": [], "highlights": []}

@@ -92,8 +92,13 @@ if df is None:
 
 assert df is not None  # type: ignore
 
-st.sidebar.markdown("### 🎛️ Pitch Controls")
-selected_domain = st.sidebar.radio("Knowledge Domain", ["All Domains 🌍", "⚡ Electricity", "🔥 Natural Gas"])
+# --- DOMAIN FILTER HANDLING ---
+# Initialize session state for the radio button placed at the bottom
+if "pitch_domain_filter" not in st.session_state:
+    st.session_state.pitch_domain_filter = "All Domains 🌍"
+
+selected_domain = st.session_state.pitch_domain_filter
+
 if "Domain" in df.columns:
     if selected_domain == "⚡ Electricity":
         df = df[df["Domain"] == "Electricity"]
@@ -196,22 +201,40 @@ with c2:
     melted_df = pd.melt(cat_df, id_vars=['Category'], value_vars=['Correctness', 'Faithfulness', 'Relevance'], 
                         var_name='Metric', value_name='Score')
     
+    domain_title_suffix = ""
+    if selected_domain != "All Domains 🌍":
+        domain_title_suffix = f" ({selected_domain})"
+        
     fig_bar = px.bar(
         melted_df, x='Category', y='Score', color='Metric', barmode='group',
-        color_discrete_sequence=['#f57c00', '#29b6f6', '#9c27b0'], title="Knowledge Domain Mastery"
+        color_discrete_sequence=['#f57c00', '#29b6f6', '#9c27b0'], 
+        title=f"Knowledge Mastery{domain_title_suffix}"
     )
     
     fig_bar.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font={'color': '#eee'},
-        xaxis={'title': "Knowledge Domain", 'showgrid': False, 'linecolor': '#333'},
+        xaxis={'title': "Categories", 'showgrid': False, 'linecolor': '#333'},
         yaxis={'title': "Score (0 to 1)", 'showgrid': True, 'gridcolor': '#333', 'range': [0, 1]},
         legend={'title': "", 'orientation': "h", 'yanchor': "bottom", 'y': 1.02, 'xanchor': "right", 'x': 1},
-        margin={'l': 0, 'r': 0, 't': 30, 'b': 0},
+        margin={'l': 0, 'r': 0, 't': 40, 'b': 0},
         height=400
     )
     st.plotly_chart(fig_bar, use_container_width=True)
+    
+    # --- PITCH CONTROLS (UNDERNEATH RIGHT GRAPH) ---
+    def trigger_rerun():
+        pass # Explicitly force Streamlit callback lifecycle
+        
+    st.radio(
+        "Knowledge Domain", 
+        ["All Domains 🌍", "⚡ Electricity", "🔥 Natural Gas"], 
+        key="pitch_domain_filter", 
+        horizontal=True,
+        label_visibility="collapsed",
+        on_change=trigger_rerun
+    )
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)

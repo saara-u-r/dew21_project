@@ -1,4 +1,9 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pandas as pd
+
 import json
 import random
 import os
@@ -36,6 +41,10 @@ data = [
     ("Can I object to data processing?", "Data Protection", "Shared")
 ]
 
+def _r(v: float, d: int) -> float:
+    # Helper to avoid weird builtin round type issues in some environments
+    return round(v, d)  # type: ignore
+
 rows = []
 for i, (q, cat, dom) in enumerate(data):
     # Determine which domain to log
@@ -55,7 +64,7 @@ for i, (q, cat, dom) in enumerate(data):
             "Domain": d,
             "Category": cat,
             "Question": q,
-            "Latency_s": round(random.uniform(2.5, 4.5), 1),
+            "Latency_s": _r(float(random.uniform(2.5, 4.5)), 1),
             "Answer_Preview": "DEW21 handles this process according to strict compliance and customer service protocols...",
             "Num_Sources": random.randint(2, 5),
             "faithfulness_score": faith,
@@ -82,8 +91,8 @@ summary = {
     "timestamp": datetime.now().strftime("%Y%m%d_%H%M%S"),
     "num_questions": len(df),
     "total_time_s": 145.2,
-    "avg_latency_s": round(df["Latency_s"].mean(), 1),
-    "scores": {c.replace("_score", ""): {"mean": round(df[c].mean(), 3), "min": round(df[c].min(), 3), "max": round(df[c].max(), 3)} for c in score_cols}
+    "avg_latency_s": _r(float(df["Latency_s"].mean()), 1),
+    "scores": {c.replace("_score", ""): {"mean": _r(float(df[c].mean()), 3), "min": _r(float(df[c].min()), 3), "max": _r(float(df[c].max()), 3)} for c in score_cols}
 }
 with open("evaluation/eval_latest.json", "w") as f:
     json.dump(summary, f, indent=2)

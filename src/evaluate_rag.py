@@ -110,13 +110,13 @@ QUICK_DATASET = [EVAL_DATASET[i] for i in range(min(3, len(EVAL_DATASET)))]  # F
 # ─────────────────────────────────────────────
 # RAG CALL WRAPPER — captures answer + contexts
 # ─────────────────────────────────────────────
-def run_rag(question: str, lang="en", mode="Standard") -> dict:
+def run_rag(question: str, lang="en", mode="Standard", k=10) -> dict:
     """Run the RAG pipeline and capture answer + retrieved document texts."""
     full_answer = ""
     retrieved_docs = []
     
     for chunk in ask_stream(question, chat_history=[], lang=lang, 
-                            retrieved_docs_out=retrieved_docs, mode=mode):
+                            retrieved_docs_out=retrieved_docs, mode=mode, k=k):
         full_answer += chunk
     
     contexts = []
@@ -289,13 +289,13 @@ async def judge_criterion(question, context, answer, ground_truth, criterion) ->
 # ─────────────────────────────────────────────
 # MAIN EVALUATION RUNNER
 # ─────────────────────────────────────────────
-async def evaluate(dataset: list[dict[str, Any]] | None = None, verbose: bool = True):
-    """Run the full evaluation suite."""
+async def evaluate(dataset: list[dict[str, Any]] | None = None, verbose: bool = True, k=10):
+    """Run the full evaluation suite for a specific k."""
     if dataset is None:
         dataset = EVAL_DATASET
     
     print("\n" + "=" * 70)
-    print("🚀 DEW21 RAG EVALUATION SUITE")
+    print(f"🚀 DEW21 RAG EVALUATION SUITE (k={k})")
     print(f"   {len(dataset)} questions • 6 metrics • LLM-as-Judge")
     print("=" * 70)
     
@@ -314,7 +314,7 @@ async def evaluate(dataset: list[dict[str, Any]] | None = None, verbose: bool = 
         
         # 1. Run RAG
         t0 = time.time()
-        rag_result = run_rag(question)
+        rag_result = run_rag(question, k=k)
         latency = time.time() - t0
         print(f"   ⏱  RAG latency: {latency:.1f}s | Sources: {len(rag_result['sources'])}")
         
@@ -339,6 +339,7 @@ async def evaluate(dataset: list[dict[str, Any]] | None = None, verbose: bool = 
             "Latency_s": round(float(latency), 1),  # type: ignore
             "Answer_Preview": rag_result["answer"][:120] + "...",
             "Num_Sources": len(rag_result["sources"]),
+            "K_Value": k,
         }
         
         for criterion, judgment in zip(criteria, judgments):
@@ -437,7 +438,25 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="DEW21 RAG Evaluation Suite")
     parser.add_argument("--quick", action="store_true", help="Run quick 3-question test")
+    parser.add_argument("--sweep", action="store_true", help="Run a sweep across different k values mapping from k=1 to k=20")
     args = parser.parse_args()
     
     dataset = QUICK_DATASET if args.quick else EVAL_DATASET
-    asyncio.run(evaluate(dataset))
+    
+    if args.sweep:
+        k_values = [1, 5, 10, 20]
+        print(f"🎯 Starting K-Sweep Analysis: {k_values}")
+        all_sweep_dfs = []
+        for k_val in k_values:
+            # Explicitly unpack to avoid Coroutine indexing errors in static analysis
+            df_k, _ = asyncio.run(evaluate(dataset, k=k_val)) # type: ignore
+            all_sweep_dfs.append(df_k)
+        
+        # Save consolidated sweep report
+        sweep_df = pd.concat(all_sweep_dfs)
+        sweep_path = "evaluation/eval_sweep_latest.csv"
+        sweep_df.to_csv(sweep_path, index=False)
+        print(f"\n📊 Consolidated K-Sweep report saved to: {sweep_path}")
+        print("✅ K-Sweep complete!")
+    else:
+        asyncio.run(evaluate(dataset))

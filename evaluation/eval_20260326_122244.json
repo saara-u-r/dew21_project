@@ -1,0 +1,38 @@
+{
+  "timestamp": "20260326_122244",
+  "num_questions": 3,
+  "total_time_s": 0.6,
+  "avg_latency_s": 0.1,
+  "scores": {
+    "faithfulness": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "relevance": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "correctness": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "context_precision": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "context_recall": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "hallucination": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    }
+  }
+}

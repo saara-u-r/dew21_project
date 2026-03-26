@@ -144,10 +144,22 @@ def _boost_docs_by_source(docs: list, boost_sources: list[str], db, lang="en") -
     # Prepend boosted docs (max 3) to ensure they appear in final context
     return [boosted_docs[i] for i in range(min(3, len(boosted_docs)))] + docs
 
-async def ahybrid_retrieve(query, lang="en", doc_filter=None):
+async def ahybrid_retrieve(query, lang="en", doc_filter=None, k=10):
     retriever = get_ensemble_retriever(lang)
     if not retriever:
         return []
+    
+    # Dynamically update k if needed
+    if k != 10:
+        # Note: This is an expensive change if done per query in production,
+        # but for evaluation/parameter sweeps, it is necessary.
+        for r in retriever.retrievers:
+            if hasattr(r, "k"):
+                setattr(r, "k", k)
+            elif hasattr(r, "search_kwargs"):
+                kwargs = getattr(r, "search_kwargs")
+                if isinstance(kwargs, dict):
+                    kwargs["k"] = k
         
     docs = await retriever.ainvoke(query)
     
@@ -279,7 +291,7 @@ import asyncio
 import threading
 import queue
 
-async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None = None, lang: str = "en", retrieved_docs_out: list[Any] | None = None, mode: str = "Standard", doc_filter: str | None = None):
+async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None = None, lang: str = "en", retrieved_docs_out: list[Any] | None = None, mode: str = "Standard", doc_filter: str | None = None, k: int = 10):
     """Aggressively optimized streaming for instant feedback with mode & filter support."""
     if chat_history is None: chat_history = []
     
@@ -287,7 +299,7 @@ async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None 
     llm = ChatOllama(model="qwen2.5:7b", temperature=0)
     
     # 1. PARALLEL ANALYSIS & BASE RETRIEVE
-    base_retrieval_task = asyncio.create_task(ahybrid_retrieve(question, lang=lang, doc_filter=doc_filter))
+    base_retrieval_task = asyncio.create_task(ahybrid_retrieve(question, lang=lang, doc_filter=doc_filter, k=k))
     
     # Run the expensive LLM analysis concurrently!
     analysis_task = asyncio.create_task(_aanalyze_query(llm, question, chat_history, lang=lang))
@@ -300,7 +312,7 @@ async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None 
     extra_retrievals: list[list[Any]] = []
     if sub_queries:
         extra_retrievals_raw = await asyncio.gather(*[
-            ahybrid_retrieve(q, lang=lang, doc_filter=doc_filter) for q in sub_queries
+            ahybrid_retrieve(q, lang=lang, doc_filter=doc_filter, k=k) for q in sub_queries
         ])
         extra_retrievals = list(extra_retrievals_raw)  # type: ignore
         
@@ -377,14 +389,14 @@ async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None 
     except Exception as e:
         yield f"Backend Delay: {e}. Retrying..."
 
-def ask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None):
+def ask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None, k=10):
     """Synchronous generator wrapper using threading and Queue to stream to Streamlit."""
     q: queue.Queue[Any] = queue.Queue()
     
     def _run_async():
         async def exhaust():
             try:
-                async for chunk in _aask_stream(question, chat_history, lang, retrieved_docs_out, mode, doc_filter):
+                async for chunk in _aask_stream(question, chat_history, lang, retrieved_docs_out, mode, doc_filter, k=k):
                     q.put(chunk)
             except Exception as e:
                 q.put(f"Backend error: {e}")

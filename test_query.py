@@ -1,5 +1,10 @@
+import os
+import sys
 import asyncio
 import json
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from src.rag import ahybrid_retrieve, _aanalyze_query, _aask_stream
 from langchain_ollama import ChatOllama
 

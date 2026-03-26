@@ -8,6 +8,7 @@ from langchain_ollama import ChatOllama  # type: ignore
 from langchain_community.vectorstores import FAISS  # type: ignore
 from langchain_core.prompts import PromptTemplate  # type: ignore
 from langchain_core.documents import Document  # type: ignore
+from langchain_core.messages import SystemMessage, HumanMessage  # type: ignore
 
 # --- CONFIG ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -378,13 +379,14 @@ async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None 
     elif len(chat_history) == 1:
         hist = f"User: {chat_history[-1]['content'][:150]}"
 
-    prompt = (
-        f"{sys_prompt}\n\n{ctx}\n\nHistory: {hist}\nQuestion: {question}\nAnswer:"
-    )
+    messages = [
+        SystemMessage(content=sys_prompt),
+        HumanMessage(content=f"CONTEXT:\n{ctx}\n\nHISTORY:\n{hist}\n\nQUESTION: {question}")
+    ]
 
     # 3. STREAMING
     try:
-        async for chunk in llm.astream(prompt):
+        async for chunk in llm.astream(messages):
             yield chunk.content
     except Exception as e:
         yield f"Backend Delay: {e}. Retrying..."
@@ -412,10 +414,10 @@ def ask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, 
             break
         yield chunk
 
-def ask(question, chat_history=None, lang="en"):
+def ask(question, chat_history=None, lang="en", mode="Standard", doc_filter=None, k=10):
     """Static version using the same logic."""
     full_answer = ""
-    for chunk in ask_stream(question, chat_history, lang):
+    for chunk in ask_stream(question, chat_history=chat_history, lang=lang, mode=mode, doc_filter=doc_filter, k=k):
         if chunk is not None:
             full_answer += str(chunk)
     return {"answer": full_answer, "contexts": [], "sources": [], "highlights": []}

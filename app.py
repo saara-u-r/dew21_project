@@ -158,8 +158,12 @@ html, body, [data-testid="stAppViewBlockContainer"] {
     font-family: 'Inter', sans-serif !important;
 }
 
+
 header, footer, #MainMenu { visibility: hidden; }
-.block-container { padding: 0 !important; max-width: 100% !important; }
+.block-container { padding: 0 80px 0 16px !important; max-width: none !important; margin: 0 !important; }
+@media (max-width: 991px) {
+    .block-container { margin: 0 auto !important; padding: 0 20px !important; }
+}
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
@@ -242,16 +246,20 @@ header, footer, #MainMenu { visibility: hidden; }
 .main-wrap {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    align-items: stretch;
+    justify-content: flex-end;
+    min-height: calc(100vh - 120px);
+    padding-bottom: 115px;
 }
 
 /* ── Hero ── */
 .hero-wrap {
-    max-width: 720px;
     width: 100%;
-    margin: 0 auto;
-    padding: 64px 24px 28px;
+    padding: 0 0 28px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 .hero-eyebrow {
     font-size: 0.7rem;
@@ -281,7 +289,7 @@ header, footer, #MainMenu { visibility: hidden; }
 
 /* Card buttons — hide Streamlit default styling, show our card on top */
 .cards-outer {
-    max-width: 720px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 0 24px 32px;
 }
@@ -290,23 +298,24 @@ header, footer, #MainMenu { visibility: hidden; }
     background: #111827;
     border: 1px solid #1F2937;
     border-radius: 12px;
-    padding: 15px 16px;
-    margin-bottom: -6px;   /* pulled tight so button sits over card */
-    pointer-events: none;  /* button handles the click */
+    padding: 24px 22px;
+    margin-bottom: -6px;
+    pointer-events: none;
     display: flex;
-    gap: 12px;
-    align-items: flex-start;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
 }
-.scard-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
-.scard-title { font-size: 0.88rem; font-weight: 600; color: #F3F4F6; margin-bottom: 3px; }
-.scard-sub   { font-size: 0.73rem; color: #6B7280; line-height: 1.4; }
+.scard-icon { font-size: 1.6rem; flex-shrink: 0; }
+.scard-title { font-size: 1.05rem; font-weight: 700; color: #F3F4F6; margin-bottom: 5px; }
+.scard-sub   { font-size: 0.82rem; color: #6B7280; line-height: 1.5; }
 
 /* ── Chat messages ── */
 .chat-wrap {
-    max-width: 760px;
+    max-width: 100%;
     width: 100%;
-    margin: 0 auto;
-    padding: 36px 24px 200px;
+    margin: 0;
+    padding: 36px 0 200px;
 }
 .stChatMessage[data-testid="chat-message-user"] {
     background: rgba(255,255,255,0.025) !important;
@@ -392,9 +401,9 @@ header, footer, #MainMenu { visibility: hidden; }
 .stChatInputContainer {
     background: transparent !important;
     border: none !important;
-    padding: 0 24px 26px 24px !important;
-    max-width: 760px !important;
-    margin: 0 auto !important;
+    padding: 0 0 26px 64px !important;
+    max-width: 100% !important;
+    margin: 0 !important;
     width: 100% !important;
 }
 div[data-testid="stChatInput"] {
@@ -403,6 +412,7 @@ div[data-testid="stChatInput"] {
     border-radius: 14px !important;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
     transition: border-color 0.2s, box-shadow 0.2s !important;
+    height: 68px !important;
 }
 div[data-testid="stChatInput"]:focus-within {
     border-color: rgba(255,106,0,0.45) !important;
@@ -428,16 +438,16 @@ button[data-testid="stChatInputSubmitButton"]:hover { opacity: 0.85 !important; 
 /* ── Mode popover ── */
 div[data-testid="stPopover"] {
     position: fixed !important;
-    bottom: 36px !important;
-    left: 283px !important;
+    bottom: 56px !important;
+    left: 272px !important;
     z-index: 9999 !important;
     margin: 0 !important;
     width: 64px !important;
-    height: 36px !important;
+    height: 68px !important;
     pointer-events: none !important;
 }
 @media (max-width: 991px) {
-    div[data-testid="stPopover"] { left: 46px !important; }
+    div[data-testid="stPopover"] { position: relative !important; bottom: 0 !important; left: 0 !important; margin-bottom: 20px !important; }
 }
 div[data-testid="stPopover"] button {
     pointer-events: auto !important;
@@ -446,7 +456,7 @@ div[data-testid="stPopover"] button {
     border: 1px solid #374151 !important;
     border-radius: 8px !important;
     width: 64px !important;
-    height: 36px !important;
+    height: 68px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
@@ -517,7 +527,7 @@ with st.sidebar:
         is_active = cid == st.session_state.chat_id
         col_t, col_d = st.columns([5, 1])
         with col_t:
-            label = ("▶ " if is_active else "💬 ") + chat_meta["title"]
+            label = ("▶️ " if is_active else "💬 ") + chat_meta["title"]
             if st.button(label, key=f"load_{cid}", use_container_width=True):
                 if st.session_state.messages:
                     save_chat(st.session_state.chat_id,
@@ -573,9 +583,9 @@ with chat_content:
         """, unsafe_allow_html=True)
 
         # ── SUGGESTION CARDS ──
-        st.markdown('<div class="cards-outer">', unsafe_allow_html=True)
-        row1 = st.columns(2)
-        row2 = st.columns(2)
+        st.markdown('<div class="cards-outer" style="padding: 0; width: 100%;">', unsafe_allow_html=True)
+        row1 = st.columns(2, gap="small")
+        row2 = st.columns(2, gap="small")
         rows = [row1, row2]
         for i, ex in enumerate(t["examples"]):  # type: ignore
             col = rows[i // 2][i % 2]

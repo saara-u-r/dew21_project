@@ -1,38 +1,110 @@
 import sys
 import os
+import json
+import uuid
+from datetime import datetime
 import streamlit as st
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from src.rag import ask
+from src.rag import ask, ask_stream
 
+# --- CHAT HISTORY PERSISTENCE ---
+HISTORY_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chat_history")
+os.makedirs(HISTORY_DIR, exist_ok=True)
+
+def _history_path(chat_id: str) -> str:
+    return os.path.join(HISTORY_DIR, f"{chat_id}.json")
+
+def save_chat(chat_id: str, title: str, messages: list, sources: list):
+    """Save a chat session to disk."""
+    if not messages:
+        return
+    data = {
+        "id": chat_id,
+        "title": title,
+        "updated_at": datetime.now().isoformat(),
+        "messages": messages,
+        "sources": sources,
+    }
+    with open(_history_path(chat_id), "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def load_chat(chat_id: str) -> dict | None:
+    """Load a single chat from disk."""
+    path = _history_path(chat_id)
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return None
+
+def delete_chat(chat_id: str):
+    """Delete a chat file."""
+    path = _history_path(chat_id)
+    if os.path.exists(path):
+        os.remove(path)
+
+def list_chats() -> list[dict]:
+    """List all saved chats, newest first."""
+    chats = []
+    for fname in os.listdir(HISTORY_DIR):
+        if fname.endswith(".json"):
+            try:
+                with open(os.path.join(HISTORY_DIR, fname), "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    chats.append({
+                        "id": data["id"],
+                        "title": data.get("title", "Untitled"),
+                        "updated_at": data.get("updated_at", ""),
+                    })
+            except Exception:
+                pass
+    chats.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
+    return chats
+
+def generate_title(messages: list) -> str:
+    """Generate a short title from the first user message."""
+    for msg in messages:
+        if msg["role"] == "user":
+            text = msg["content"].strip()
+            # Truncate to ~40 chars at word boundary
+            if len(text) > 40:
+                text = text[:37].rsplit(" ", 1)[0] + "..."
+            return text
+    return "New Chat"
+
+# --- PAGE CONFIG ---
 st.set_page_config(
     page_title="DEW21 Assistant",
     page_icon="⚡",
-    layout="centered",
-    initial_sidebar_state="collapsed"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
+# --- THEME & UI TOKENS ---
 UI = {
     "en": {
-        "title": "DEW21 <span>⚡</span> Assistant",
-        "description": "Ask about your energy contracts, billing, and legal rights.",
-        "placeholder": "Ask DEW21 Assistant...",
+        "title": "DEW21 AI",
+        "subtitle": "Energy Intelligence Platform",
+        "description": "How can I help you today?",
+        "placeholder": "Message DEW21 Assistant...",
         "clear": "New Chat",
         "thinking": "Searching documents...",
-        "examples": ["What is SCHUFA?", "Can I terminate my contract?", "What are the payment terms?"],
+        "examples": ["Compare Electricity vs Gas rights", "What are the latest payment terms?", "Explain SCHUFA impact"],
         "lang_label": "🌐 EN"
     },
     "de": {
-        "title": "DEW21 <span>⚡</span> Assistent",
-        "description": "Fragen zu Energieverträgen, Abrechnung und Ihren Rechten.",
-        "placeholder": "DEW21 Assistent fragen...",
+        "title": "DEW21 KI",
+        "subtitle": "Energie-Intelligenz-Plattform",
+        "description": "Wie kann ich dir heute helfen?",
+        "placeholder": "DEW21 Assistent eine Nachricht senden...",
         "clear": "Neuer Chat",
         "thinking": "Dokumente werden durchsucht...",
-        "examples": ["Was ist die SCHUFA?", "Kann ich meinen Vertrag kündigen?", "Was sind die Zahlungsbedingungen?"],
+        "examples": ["Strom vs. Gas Rechte vergleichen", "Zahlungsbedingungen prüfen", "SCHUFA-Auswirkungen erklären"],
         "lang_label": "🌐 DE"
     }
 }
 
+# --- SESSION STATE ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "sources" not in st.session_state:
@@ -45,350 +117,344 @@ if "context" not in st.session_state:
     st.session_state.context = "All Docs"
 if "generating" not in st.session_state:
     st.session_state.generating = False
+if "chat_id" not in st.session_state:
+    st.session_state.chat_id = str(uuid.uuid4())
+if "chat_title" not in st.session_state:
+    st.session_state.chat_title = "New Chat"
 
 t = UI[st.session_state.lang]
 
+# --- CUSTOM CSS (THE MASTERPIECE) ---
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
 
-/* ===== BASE ===== */
-html, body, .stApp {
+/* Reset and Base */
+html, body, [data-testid="stAppViewBlockContainer"] {
     background-color: #0d0d0d !important;
-    color: #f5f5f5 !important;
+    color: #ececec !important;
     font-family: 'Inter', sans-serif !important;
 }
 
-/* Hide all default Streamlit chrome */
-#MainMenu, footer, header { visibility: hidden; height: 0 !important; }
-.block-container {
-    padding-top: 0 !important;
-    padding-bottom: 120px !important;
-    max-width: 780px !important;
+/* Hide Streamlit elements */
+header, footer, #MainMenu { visibility: hidden; }
+.block-container { 
+    padding: 0 !important; 
+    max-width: 100% !important;
 }
 
-/* ===== TOP NAV BAR ===== */
-.top-nav {
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background-color: #000000 !important;
+    border-right: 1px solid #222 !important;
+    width: 260px !important;
+}
+[data-testid="stSidebarNav"] { display: none; }
+
+.sidebar-header {
+    padding: 20px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 18px 0 14px;
-    border-bottom: 1px solid #1f1f1f;
-    margin-bottom: 36px;
+    gap: 8px;
 }
-.nav-logo {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #ffffff;
-}
-.nav-logo span { color: #F57C00; }
+.sidebar-header span { color: #f57c00; }
 
-/* ===== HERO AREA ===== */
-.hero {
-    text-align: center;
-    padding: 20px 0 36px;
-}
-.hero h1 {
-    font-size: 40px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-    color: #ffffff;
-    margin-bottom: 8px;
-    line-height: 1.1;
-}
-.hero h1 span { color: #F57C00; }
-.hero p {
-    font-size: 15px;
-    color: #888;
-    font-weight: 400;
-    max-width: 420px;
-    margin: 0 auto;
+.sidebar-section-title {
+    padding: 24px 16px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-/* ===== CHAT MESSAGES ===== */
-.stChatMessage {
-    background: #161616 !important;
-    border: 1px solid #252525 !important;
-    border-radius: 14px !important;
-    padding: 16px 20px !important;
-    margin-bottom: 14px !important;
-    box-shadow: none !important;
+.history-item {
+    padding: 10px 16px;
+    margin: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #ccc;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s;
 }
-.stChatMessage [data-testid="stMarkdownContainer"] p {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 15px !important;
-    line-height: 1.65 !important;
-    color: #e8e8e8 !important;
-}
-
-/* User bubble — orange tint */
-.stChatMessage[data-testid="chat-message-user"] {
-    background: #1a1200 !important;
-    border: 1px solid #3d2800 !important;
-    border-radius: 14px 14px 4px 14px !important;
-    margin-left: auto;
-    width: fit-content;
-    max-width: 85%;
-}
-.stChatMessage[data-testid="chat-message-user"] [data-testid="stMarkdownContainer"] p {
-    color: #ffd180 !important;
+.history-item:hover {
+    background: #1a1a1a;
+    color: #fff;
 }
 
-/* Assistant bubble — subtle left accent */
-.stChatMessage[data-testid="chat-message-assistant"] {
-    border-left: 3px solid #F57C00 !important;
-    border-radius: 4px 14px 14px 14px !important;
+/* Main Layout */
+.main-chat-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
 }
 
-/* ===== EXPANDER (Citations) ===== */
-.streamlit-expanderHeader {
-    font-size: 13px !important;
-    color: #F57C00 !important;
-    background: transparent !important;
-    border: none !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.2px !important;
-}
-.streamlit-expanderContent {
-    background: #0d0d0d !important;
-    border: 1px solid #222 !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-    font-size: 13px !important;
-    color: #aaa !important;
+.chat-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 80px 20px 160px;
 }
 
-/* ===== EXAMPLE BUTTONS ===== */
-div[data-testid="stButton"] button {
-    background: #161616 !important;
-    border: 1px solid #2a2a2a !important;
-    color: #c0c0c0 !important;
-    border-radius: 8px !important;
-    font-size: 13px !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
-    padding: 8px 12px !important;
-    transition: all 0.2s ease !important;
-}
-div[data-testid="stButton"] button:hover {
-    background: #1f1400 !important;
-    border-color: #F57C00 !important;
-    color: #F57C00 !important;
-}
-
-/* ===== CHAT INPUT BAR ===== */
-.stChatInputContainer {
-    background: #161616 !important;
-    border: 1px solid #2a2a2a !important;
-    border-radius: 14px !important;
-    padding: 6px !important;
-    max-width: 780px !important;
-    margin: 0 auto !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6) !important;
-    bottom: 20px !important;
-}
-.stChatInputContainer:focus-within {
-    border-color: #F57C00 !important;
-}
-.stChatInputContainer textarea {
-    background: transparent !important;
-    font-size: 15px !important;
-    color: #f0f0f0 !important;
-    padding: 8px 14px !important;
-    line-height: 1.5 !important;
-    font-family: 'Inter', sans-serif !important;
-}
-
-/* Send button glow */
-.stChatInputContainer button {
-    color: #F57C00 !important;
-}
-
-/* ===== SPINNER ===== */
-.stSpinner p { color: #888 !important; font-size: 14px !important; }
-
-/* ===== POPOVER (Language Dropdown) ===== */
-div[data-testid="stPopover"] button {
-    background: #161616 !important;
-    border: 1px solid #2a2a2a !important;
-    border-radius: 8px !important;
-    color: #c0c0c0 !important;
-    font-size: 13px !important;
-    padding: 6px 10px !important;
-    width: 100% !important;
-}
-div[data-testid="stPopover"] button:hover {
-    border-color: #F57C00 !important;
-    color: #F57C00 !important;
-}
-div[data-testid="stPopoverContent"] button {
-    text-align: left !important;
-    justify-content: flex-start !important;
-    border: none !important;
-    background: transparent !important;
-    padding: 8px 12px !important;
-    color: #fff !important;
-}
-div[data-testid="stPopoverContent"] button:hover {
-    background: #1f1400 !important;
-    color: #F57C00 !important;
-}
-/* ===== HIDE STREAMLIT CHROME & DIMMING ===== */
-div[data-testid="stAppViewBlockContainer"] > div:last-child {
-    background: transparent !important;
-}
-[data-testid="stAppViewBlockContainer"] {
-    opacity: 1 !important; /* Forces full opacity even during run */
-}
-.stActionButton { display: none !important; }
-
-/* Custom Pulse for Searching */
-@keyframes pulse {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-}
-.searching-pulse {
-    animation: pulse 1.5s infinite ease-in-out;
-    color: #F57C00;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 20px;
-}
-
-/* THE UNIFIED COMMAND BAR */
-.controls-container {
+/* Model Selector (Modern ChatGPT Style) */
+div[data-testid="stPopover"] {
     position: fixed !important;
     bottom: 90px !important;
-    left: 20px !important; /* Left-aligned like ChatGPT tools */
-    z-index: 1000000 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 1000 !important;
+    width: auto !important;
 }
 
 div[data-testid="stPopover"] button {
-    background: rgba(15, 15, 15, 0.95) !important;
-    backdrop-filter: blur(16px) !important;
+    background: rgba(20, 20, 20, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 12px !important;
+    padding: 8px 16px !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
     color: #fff !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    padding: 0 16px !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
-    height: 38px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
 }
-
 div[data-testid="stPopover"] button:hover {
-    background: rgba(40, 40, 40, 0.9) !important;
-    border-color: #F57C00 !important;
-    color: #F57C00 !important;
-    box-shadow: 0 0 15px rgba(245, 124, 0, 0.1) !important;
+    background: rgba(40, 40, 40, 0.8) !important;
+    border-color: rgba(245, 124, 0, 0.5) !important;
 }
 
-/* Fix for the popover content to match theme */
-div[data-testid="stPopoverContent"] {
-    background: #141414 !important;
-    border: 1px solid #2a2a2a !important;
-    border-radius: 12px !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    text-align: center;
+}
+.hero-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #fff;
+}
+.hero-logo span { color: #f57c00; }
+
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Message Styling */
+.stChatMessage {
+    background: transparent !important;
+    border: none !important;
+    padding: 24px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.stChatMessage[data-testid="chat-message-user"] {
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+[data-testid="stMarkdownContainer"] p {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+    color: #d1d1d1 !important;
+}
+
+/* Chat Input Area */
+.stChatInputContainer {
+    background: transparent !important;
+    border: none !important;
+    padding-bottom: 40px !important;
+}
+.stChatInputContainer > div {
+    background: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    transition: border-color 0.3s;
+}
+.stChatInputContainer:focus-within > div {
+    border-color: #f57c00 !important;
+}
+
+/* Custom Searching Animation */
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
+.searching-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(to right, rgba(245, 124, 0, 0.05) 8%, rgba(245, 124, 0, 0.2) 18%, rgba(245, 124, 0, 0.05) 33%);
+    background-size: 800px 104px;
+    animation: shimmer 2s infinite linear;
+    border: 1px solid rgba(245, 124, 0, 0.3);
+    border-radius: 100px;
+    color: #f57c00;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* Expander (Citations) */
+.streamlit-expanderHeader {
+    background: transparent !important;
+    color: #666 !important;
+    font-size: 0.8rem !important;
+    border: none !important;
+}
+.streamlit-expanderHeader:hover {
+    color: #f57c00 !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Top Nav
-col_logo, col_spacer, col_lang, col_clear = st.columns([3, 2, 1, 1.4])
-with col_logo:
-    st.markdown('<div class="nav-logo">DEW<span>21</span></div>', unsafe_allow_html=True)
-with col_lang:
-    with st.popover(f"{st.session_state.lang.upper()} 🌐", use_container_width=True):
+# --- SIDEBAR ---
+with st.sidebar:
+    st.markdown(f'<div class="sidebar-header">DEW<span>21</span> {t["title"]}</div>', unsafe_allow_html=True)
+    
+    # New Chat button — saves current chat first
+    if st.button(f"➕ {t['clear']}", use_container_width=True, type="secondary"):
+        # Save current conversation before starting new one
+        if st.session_state.messages:
+            title = generate_title(st.session_state.messages)
+            save_chat(st.session_state.chat_id, title, st.session_state.messages, st.session_state.sources)
+        # Reset to a fresh chat
+        st.session_state.messages = []
+        st.session_state.sources = []
+        st.session_state.chat_id = str(uuid.uuid4())
+        st.session_state.chat_title = "New Chat"
+        st.rerun()
+        
+    st.markdown('<div class="sidebar-section-title">History</div>', unsafe_allow_html=True)
+    
+    # Real persistent history
+    saved_chats = list_chats()
+    for chat_meta in saved_chats:
+        cid = chat_meta["id"]
+        is_active = cid == st.session_state.chat_id
+        
+        col_title, col_del = st.columns([5, 1])
+        with col_title:
+            label = f"💬 {chat_meta['title']}" if not is_active else f"▶ {chat_meta['title']}"
+            if st.button(label, key=f"load_{cid}", use_container_width=True):
+                # Save current chat before switching
+                if st.session_state.messages:
+                    save_chat(st.session_state.chat_id, generate_title(st.session_state.messages), st.session_state.messages, st.session_state.sources)
+                # Load the selected chat
+                chat_data = load_chat(cid)
+                if chat_data:
+                    st.session_state.chat_id = chat_data["id"]
+                    st.session_state.chat_title = chat_data.get("title", "Untitled")
+                    st.session_state.messages = chat_data.get("messages", [])
+                    st.session_state.sources = chat_data.get("sources", [])
+                    st.rerun()
+        with col_del:
+            if st.button("🗑", key=f"del_{cid}"):
+                delete_chat(cid)
+                # If we deleted the active chat, reset
+                if is_active:
+                    st.session_state.messages = []
+                    st.session_state.sources = []
+                    st.session_state.chat_id = str(uuid.uuid4())
+                    st.session_state.chat_title = "New Chat"
+                st.rerun()
+    
+    if not saved_chats:
+        st.caption("No saved chats yet.")
+        
+    st.markdown('<div style="margin-top: auto;"></div>', unsafe_allow_html=True)
+    
+    # Bottom Sidebar Settings
+    with st.expander("🌐 Language & Region"):
         if st.button("English 🇺🇸", use_container_width=True):
             st.session_state.lang = "en"
             st.rerun()
         if st.button("Deutsch 🇩🇪", use_container_width=True):
             st.session_state.lang = "de"
             st.rerun()
-with col_clear:
-    if st.button(t["clear"], use_container_width=True):
-        st.session_state.messages = []
-        st.session_state.sources = []
-        st.rerun()
 
-# ── Hero Section (only when chat is empty)
-if not st.session_state.messages:
-    st.markdown(f'''
-    <div class="hero">
-        <h1>{t["title"]}</h1>
-        <p>{t["description"]}</p>
-    </div>
-    ''', unsafe_allow_html=True)
 
-    # ── Example Chips
-    cols = st.columns(3)
-    for i, ex in enumerate(t["examples"]):
-        if cols[i].button(ex, use_container_width=True):
-            st.session_state.example_trigger = ex
-            st.rerun()
 
-# ── Chat history
-chat_container = st.container()
-with chat_container:
-    for i, msg in enumerate(st.session_state.messages):
-        avatar = "🧑" if msg["role"] == "user" else "⚡"
-        with st.chat_message(msg["role"], avatar=avatar):
-            st.markdown(msg["content"])
-            if msg["role"] == "assistant" and i < len(st.session_state.sources):
-                sdata = st.session_state.sources[i]
-                if sdata and sdata.get("highlights"):
-                    with st.expander("📎 View Citations"):
-                        for h in sdata["highlights"]:
-                            st.caption(f'"{h["text"]}"')
-                            st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
+# --- MAIN CHAT AREA ---
+st.markdown('<div class="main-chat-area">', unsafe_allow_html=True)
 
+# Container for history and hero
+chat_content = st.container()
+
+# Wrap history in centered container
+st.markdown('<div style="max-width: 800px; margin: 0 auto; width: 100%;">', unsafe_allow_html=True)
+
+with chat_content:
+    if not st.session_state.messages:
+        # Hero Section
+        st.markdown(f'''
+        <div class="hero">
+            <div class="hero-logo">DEW<span>21</span></div>
+            <p style="font-size: 1.5rem; font-weight: 500; color: #fff; margin-bottom: 32px;">{t["description"]}</p>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        # Example Buttons
+        ex_cols = st.columns([1, 1, 1])
+        for i, ex in enumerate(t["examples"]):
+            if ex_cols[i % 3].button(ex, use_container_width=True):
+                st.session_state.example_trigger = ex
+                st.rerun()
+    else:
+        # Chat Messages
+        for i, msg in enumerate(st.session_state.messages):
+            role = msg["role"]
+            avatar = "⚡" if role == "assistant" else None
+            with st.chat_message(role, avatar=avatar):
+                st.markdown(msg["content"])
+                
+                if role == "assistant" and i < len(st.session_state.sources):
+                    sdata = st.session_state.sources[i]
+                    if sdata and sdata.get("highlights"):
+                        with st.expander("View Citations"):
+                            for h in sdata["highlights"]:
+                                st.caption(f'"{h["text"]}"')
+                                st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
+
+# --- CHAT INPUT ---
 user_query = st.chat_input(t["placeholder"], disabled=st.session_state.generating)
-
-# --- UNIFIED SETTINGS (MODE + CONTEXT) ---
-st.markdown('<div class="controls-container">', unsafe_allow_html=True)
-mode_icons = {"Simplified": "📄", "Standard": "⚖️", "Expert": "🎓"}
-ctx_icons = {"All Docs": "📚", "Electricity": "⚡", "Gas": "🔥", "SCHUFA": "🏦", "Creditreform": "💳"}
-
-with st.popover(f"⚙️ {st.session_state.mode} • {st.session_state.context}", use_container_width=False):
-    st.write("**Target Mode**")
-    for m in ["Simplified", "Standard", "Expert"]:
-        if st.button(f"{mode_icons[m]} {m}", key=f"btn_mode_{m}", use_container_width=True):
-            st.session_state.mode = m
-            st.rerun()
-    st.write("---")
-    st.write("**Document Context**")
-    for c in ["All Docs", "Electricity", "Gas", "SCHUFA", "Creditreform"]:
-        if st.button(f"{ctx_icons[c]} {c}", key=f"btn_ctx_{c}", use_container_width=True):
-            st.session_state.context = c
-            st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
 
 if hasattr(st.session_state, "example_trigger") and st.session_state.example_trigger:
     user_query = st.session_state.example_trigger
     del st.session_state.example_trigger
 
 if user_query:
-    # ── Immediate state update
     st.session_state.generating = True
     st.session_state.messages.append({"role": "user", "content": user_query})
     st.session_state.sources.append(None)
     st.rerun()
 
-# ── Processing the last message if needed
+# --- GENERATION LOGIC ---
 if st.session_state.messages and st.session_state.messages[-1]["role"] == "user" and st.session_state.generating:
     last_query = st.session_state.messages[-1]["content"]
     
-    with chat_container.chat_message("assistant", avatar="⚡"):
-        # Use st.write_stream for real-time feedback
-        from src.rag import ask_stream
-        
-        # Display a small badge while initializing
+    with st.chat_message("assistant", avatar="⚡"):
         with st.empty():
-            st.markdown('<div class="searching-pulse">🔍 Searching documents...</div>', unsafe_allow_html=True)
+            st.markdown('<div class="searching-badge"><span>🔍</span> Searching documents...</div>', unsafe_allow_html=True)
             
-            # Stream the answer
             retrieved_docs = []
             assistant_content = st.write_stream(
                 ask_stream(
@@ -404,7 +470,6 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
         highlights = []
         for d in retrieved_docs:
             source = d.metadata.get("doc_name", "Unknown Document")
-            # Create a short snippet
             snippet = d.page_content.replace('\n', ' ')
             if len(snippet) > 150:
                 snippet = snippet[:147] + "..."
@@ -413,4 +478,14 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
     st.session_state.messages.append({"role": "assistant", "content": assistant_content})
     st.session_state.sources.append({"highlights": highlights})
     st.session_state.generating = False
+    
+    # Auto-save after every assistant response
+    title = generate_title(st.session_state.messages)
+    st.session_state.chat_title = title
+    save_chat(st.session_state.chat_id, title, st.session_state.messages, st.session_state.sources)
+    
     st.rerun()
+
+st.markdown('</div>', unsafe_allow_html=True) # Close centered container
+st.markdown('</div>', unsafe_allow_html=True) # Close main-chat-area
+

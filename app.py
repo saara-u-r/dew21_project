@@ -66,7 +66,6 @@ def generate_title(messages: list) -> str:
     for msg in messages:
         if msg["role"] == "user":
             text = msg["content"].strip()
-            # Truncate to ~40 chars at word boundary
             if len(text) > 40:
                 text = text[:37].rsplit(" ", 1)[0] + "..."
             return text
@@ -124,7 +123,7 @@ if "chat_title" not in st.session_state:
 
 t = UI[st.session_state.lang]
 
-# --- CUSTOM CSS (THE MASTERPIECE) ---
+# --- CUSTOM CSS ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
@@ -204,32 +203,6 @@ header, footer, #MainMenu { visibility: hidden; }
     padding: 80px 20px 160px;
 }
 
-/* Model Selector (Modern ChatGPT Style) */
-div[data-testid="stPopover"] {
-    position: fixed !important;
-    bottom: 90px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 1000 !important;
-    width: auto !important;
-}
-
-div[data-testid="stPopover"] button {
-    background: rgba(20, 20, 20, 0.7) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
-    padding: 8px 16px !important;
-    font-family: 'Outfit', sans-serif !important;
-    font-weight: 600 !important;
-    color: #fff !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-}
-div[data-testid="stPopover"] button:hover {
-    background: rgba(40, 40, 40, 0.8) !important;
-    border-color: rgba(245, 124, 0, 0.5) !important;
-}
-
 /* Hero Section */
 .hero {
     display: flex;
@@ -273,23 +246,112 @@ div[data-testid="stPopover"] button:hover {
     color: #d1d1d1 !important;
 }
 
-/* Chat Input Area */
+/* Chat Input Container */
 .stChatInputContainer {
     background: transparent !important;
     border: none !important;
-    padding-bottom: 40px !important;
+    padding: 0 40px 40px 40px !important;
 }
-.stChatInputContainer > div {
-    background: #1e1e1e !important;
-    border: 1px solid #333 !important;
-    border-radius: 16px !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
-    max-width: 800px !important;
-    margin: 0 auto !important;
-    transition: border-color 0.3s;
+div[data-testid="stChatInput"] {
+    background: #282828 !important;
+    border: 1px solid #404040 !important;
+    border-radius: 40px !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 10px !important;
 }
-.stChatInputContainer:focus-within > div {
+div[data-testid="stChatInput"]:focus-within {
+    border-color: #666 !important;
+    background: #2e2e2e !important;
+}
+
+div[data-testid="stChatInput"] textarea,
+.stChatInputContainer textarea {
+    padding-left: 55px !important;
+    color: #ececec !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Submit button */
+button[data-testid="stChatInputSubmitButton"] {
+    background-color: #007aff !important;
+    border-radius: 50% !important;
+    padding: 6px !important;
+    margin: 4px 6px !important;
+    transition: background-color 0.2s !important;
+}
+button[data-testid="stChatInputSubmitButton"] svg {
+    fill: white !important;
+}
+button[data-testid="stChatInputSubmitButton"]:hover {
+    background-color: #005bb5 !important;
+}
+
+/* ============================================================
+   MODE BUTTON (Popover) — FIXED & VISIBLE
+   Shifted left: sidebar(260px) + padding(40px) - nudge back(20px) = 280px
+   Widened to 58px to fit "MODE" text comfortably.
+   ============================================================ */
+div[data-testid="stPopover"] {
+    position: fixed !important;
+    bottom: 46px !important;
+    left: 280px !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    width: 58px !important;
+    height: 58px !important;
+    pointer-events: none !important;
+}
+
+/* Collapsed sidebar adjustment */
+@media (max-width: 991px) {
+    div[data-testid="stPopover"] {
+        left: 46px !important;
+    }
+}
+
+div[data-testid="stPopover"] button {
+    pointer-events: auto !important;
+    background: #2a2a2a !important;
+    background-color: #2a2a2a !important;
+    border: 1.5px solid #555 !important;
+    border-radius: 50% !important;
+    width: 58px !important;
+    height: 58px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6) !important;
+    transition: background-color 0.2s, border-color 0.2s !important;
+}
+
+div[data-testid="stPopover"] button:hover {
+    background-color: #3a3a3a !important;
     border-color: #f57c00 !important;
+}
+
+div[data-testid="stPopover"] button:focus {
+    box-shadow: 0 0 0 2px rgba(245,124,0,0.4) !important;
+    outline: none !important;
+}
+
+/* "MODE" text inside the button */
+div[data-testid="stPopover"] button p {
+    margin: 0 !important;
+    line-height: 1 !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+
+/* Hide the dropdown caret Streamlit adds */
+div[data-testid="stPopover"] button svg,
+div[data-testid="stPopover"] button span > svg {
+    display: none !important;
 }
 
 /* Custom Searching Animation */
@@ -328,15 +390,13 @@ div[data-testid="stPopover"] button:hover {
 
 # --- SIDEBAR ---
 with st.sidebar:
-    st.markdown(f'<div class="sidebar-header">DEW<span>21</span> {t["title"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-header">DEW<span>21</span> Assistant</div>', unsafe_allow_html=True)
     
     # New Chat button — saves current chat first
     if st.button(f"➕ {t['clear']}", use_container_width=True, type="secondary"):
-        # Save current conversation before starting new one
         if st.session_state.messages:
             title = generate_title(st.session_state.messages)
             save_chat(st.session_state.chat_id, title, st.session_state.messages, st.session_state.sources)
-        # Reset to a fresh chat
         st.session_state.messages = []
         st.session_state.sources = []
         st.session_state.chat_id = str(uuid.uuid4())
@@ -345,7 +405,6 @@ with st.sidebar:
         
     st.markdown('<div class="sidebar-section-title">History</div>', unsafe_allow_html=True)
     
-    # Real persistent history
     saved_chats = list_chats()
     for chat_meta in saved_chats:
         cid = chat_meta["id"]
@@ -355,10 +414,8 @@ with st.sidebar:
         with col_title:
             label = f"💬 {chat_meta['title']}" if not is_active else f"▶ {chat_meta['title']}"
             if st.button(label, key=f"load_{cid}", use_container_width=True):
-                # Save current chat before switching
                 if st.session_state.messages:
                     save_chat(st.session_state.chat_id, generate_title(st.session_state.messages), st.session_state.messages, st.session_state.sources)
-                # Load the selected chat
                 chat_data = load_chat(cid)
                 if chat_data:
                     st.session_state.chat_id = chat_data["id"]
@@ -369,7 +426,6 @@ with st.sidebar:
         with col_del:
             if st.button("🗑", key=f"del_{cid}"):
                 delete_chat(cid)
-                # If we deleted the active chat, reset
                 if is_active:
                     st.session_state.messages = []
                     st.session_state.sources = []
@@ -382,7 +438,6 @@ with st.sidebar:
         
     st.markdown('<div style="margin-top: auto;"></div>', unsafe_allow_html=True)
     
-    # Bottom Sidebar Settings
     with st.expander("🌐 Language & Region"):
         if st.button("English 🇺🇸", use_container_width=True):
             st.session_state.lang = "en"
@@ -392,19 +447,15 @@ with st.sidebar:
             st.rerun()
 
 
-
 # --- MAIN CHAT AREA ---
 st.markdown('<div class="main-chat-area">', unsafe_allow_html=True)
 
-# Container for history and hero
 chat_content = st.container()
 
-# Wrap history in centered container
 st.markdown('<div style="max-width: 800px; margin: 0 auto; width: 100%;">', unsafe_allow_html=True)
 
 with chat_content:
     if not st.session_state.messages:
-        # Hero Section
         st.markdown(f'''
         <div class="hero">
             <div class="hero-logo">DEW<span>21</span></div>
@@ -412,14 +463,12 @@ with chat_content:
         </div>
         ''', unsafe_allow_html=True)
         
-        # Example Buttons
         ex_cols = st.columns([1, 1, 1])
         for i, ex in enumerate(t["examples"]):
             if ex_cols[i % 3].button(ex, use_container_width=True):
                 st.session_state.example_trigger = ex
                 st.rerun()
     else:
-        # Chat Messages
         for i, msg in enumerate(st.session_state.messages):
             role = msg["role"]
             avatar = "⚡" if role == "assistant" else None
@@ -434,7 +483,23 @@ with chat_content:
                                 st.caption(f'"{h["text"]}"')
                                 st.markdown(f"<small style='color:#555'>— {h['source']}</small>", unsafe_allow_html=True)
 
-# --- CHAT INPUT ---
+# --- CHAT INPUT & PROMPT MODE SELECTION ---
+mode_options = ["Simplified", "Standard", "Expert"]
+mode_icons = {"Simplified": "📄", "Standard": "⚖️", "Expert": "🎓"}
+
+# Mode popover — now styled to be clearly visible
+with st.popover("MODE", use_container_width=False):
+    st.markdown(
+        f"<p style='font-size:0.75rem; color:#888; margin-bottom:8px;'>Response Mode &nbsp;"
+        f"<span style='color:#f57c00; font-weight:600;'>{mode_icons[st.session_state.mode]} {st.session_state.mode}</span></p>",
+        unsafe_allow_html=True
+    )
+    for m in mode_options:
+        prefix = "✓ " if st.session_state.mode == m else ""
+        if st.button(f"{prefix}{mode_icons[m]} {m}", key=f"mode_sel_{m}", use_container_width=True):
+            st.session_state.mode = m
+            st.rerun()
+
 user_query = st.chat_input(t["placeholder"], disabled=st.session_state.generating)
 
 if hasattr(st.session_state, "example_trigger") and st.session_state.example_trigger:
@@ -479,13 +544,11 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
     st.session_state.sources.append({"highlights": highlights})
     st.session_state.generating = False
     
-    # Auto-save after every assistant response
     title = generate_title(st.session_state.messages)
     st.session_state.chat_title = title
     save_chat(st.session_state.chat_id, title, st.session_state.messages, st.session_state.sources)
     
     st.rerun()
 
-st.markdown('</div>', unsafe_allow_html=True) # Close centered container
-st.markdown('</div>', unsafe_allow_html=True) # Close main-chat-area
-
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)

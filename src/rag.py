@@ -1,12 +1,13 @@
 import os
 import time
-from langchain_community.retrievers import BM25Retriever
-from langchain_classic.retrievers import EnsembleRetriever  # Force reload fix
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_ollama import ChatOllama
-from langchain_community.vectorstores import FAISS
-from langchain_core.prompts import PromptTemplate
-from langchain_core.documents import Document
+from typing import Any
+from langchain_community.retrievers import BM25Retriever  # type: ignore
+from langchain_classic.retrievers import EnsembleRetriever  # type: ignore
+from langchain_huggingface import HuggingFaceEmbeddings  # type: ignore
+from langchain_ollama import ChatOllama  # type: ignore
+from langchain_community.vectorstores import FAISS  # type: ignore
+from langchain_core.prompts import PromptTemplate  # type: ignore
+from langchain_core.documents import Document  # type: ignore
 
 # --- CONFIG ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +20,7 @@ FAISS_PATH_DE = os.path.join(BASE_DIR, "faiss_index_de")
 # --- EMBEDDINGS (bge-m3 Multilingual) ---
 model_name = "BAAI/bge-m3"
 # Use 'mps' for Mac Apple Silicon, fallback to 'cpu'
-import torch
+import torch  # type: ignore
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 model_kwargs = {"device": device}
 encode_kwargs = {"normalize_embeddings": True}
@@ -81,6 +82,68 @@ print("BM25 indices ready.", flush=True)
 def get_ensemble_retriever(lang="en"):
     return _ENSEMBLE_CACHE.get(lang)
 
+# Keyword triggers for boosting small/underrepresented documents
+_KEYWORD_BOOST_MAP = {
+    "cost": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "price": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "fee": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "reconnect": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "disconnect": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "reminder": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "invoice copy": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "kosten": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "preis": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "gebühr": ["Cost_Overview", "cost overview", "DEW21_Cost"],
+    "schufa": ["Schufa", "SCHUFA", "Anhang_Schufa"],
+    "creditreform": ["Creditreform", "creditreform"],
+    "bonitätsprüfung": ["Schufa", "Creditreform"],
+    "creditworthiness": ["Schufa", "Creditreform"],
+}
+
+def _get_keyword_boost_sources(query: str) -> list[str]:
+    """Check if the query triggers keyword-based source boosting."""
+    q_lower = query.lower()
+    boost_sources = []
+    for keyword, sources in _KEYWORD_BOOST_MAP.items():
+        if keyword in q_lower:
+            boost_sources.extend(sources)
+    return list(set(boost_sources))
+
+def _boost_docs_by_source(docs: list, boost_sources: list[str], db, lang="en") -> list:
+    """Ensure documents from boosted sources appear in results."""
+    if not boost_sources or not db:
+        return docs
+    
+    # Check if any retrieved doc already comes from a boosted source
+    existing_sources = set()
+    for d in docs:
+        src = d.metadata.get("source", "").lower()
+        existing_sources.add(src)
+    
+    # Find if boost sources are missing
+    missing_boost = []
+    for bs in boost_sources:
+        found = any(bs.lower() in s for s in existing_sources)
+        if not found:
+            missing_boost.append(bs)
+    
+    if not missing_boost:
+        return docs  # Boost sources already present
+    
+    # Force-retrieve from the full docstore for missing sources
+    collection = db.docstore._dict
+    boosted_docs = []
+    for doc in collection.values():
+        src = doc.metadata.get("source", "").lower()
+        for bs in missing_boost:
+            if bs.lower() in src:
+                boosted_docs.append(
+                    Document(page_content=doc.page_content, metadata=doc.metadata)
+                )
+    
+    # Prepend boosted docs (max 3) to ensure they appear in final context
+    return [boosted_docs[i] for i in range(min(3, len(boosted_docs)))] + docs
+
 async def ahybrid_retrieve(query, lang="en", doc_filter=None):
     retriever = get_ensemble_retriever(lang)
     if not retriever:
@@ -88,8 +151,13 @@ async def ahybrid_retrieve(query, lang="en", doc_filter=None):
         
     docs = await retriever.ainvoke(query)
     
+    # KEYWORD BOOST: Force-include docs from small/underrepresented sources
+    boost_sources = _get_keyword_boost_sources(query)
+    if boost_sources:
+        db = db_en if lang == "en" else db_de
+        docs = _boost_docs_by_source(docs, boost_sources, db, lang)
+    
     if doc_filter and doc_filter != "All Docs":
-        # Simplified filtering by checking if doc_filter is in the metadata source name
         filtered = [d for d in docs if doc_filter.lower() in d.metadata.get("source", "").lower()]
         return filtered
     return docs
@@ -100,39 +168,55 @@ async def ahybrid_retrieve(query, lang="en", doc_filter=None):
 # --- PROMPT MODES ---
 MODE_PROMPTS = {
     "Simplified": {
-        "en": "Use simple, non-legal language. Avoid jargon. Explain concepts as if to a layman or customer. Keep it friendly and easy to understand.",
-        "de": "Verwende einfache, nicht-juristische Sprache. Vermeide Fachjargon. Erkläre Konzepte für Laien oder Kunden. Halte es freundlich und leicht verständlich."
+        "en": "MODE: SIMPLIFIED. You MUST rephrase the context into very simple, everyday language. Avoid all legal jargon. Explain concepts patiently as if to a layman or customer. Be extremely friendly and helpful.",
+        "de": "MODE: SIMPLIFIED. Du MUSST den Kontext in sehr einfache Alltagssprache umformulieren. Vermeide jeden Fachjargon. Erkläre Konzepte geduldig wie für einen Laien oder Kunden. Sei extrem freundlich und hilfsbereit."
     },
     "Standard": {
-        "en": "Provide a clear and balanced answer. Use standard professional language.",
-        "de": "Gib eine klare und ausgewogene Antwort. Verwende professionelle Standardsprache."
+        "en": "MODE: STANDARD. Provide a clear, professional, and balanced answer. The answer should be slightly more detailed than the simplified mode.",
+        "de": "MODE: STANDARD. Gib eine klare, professionelle und ausgewogene Antwort. Die Antwort sollte etwas detaillierter sein als im vereinfachten Modus."
     },
     "Expert": {
-        "en": "Use precise legal terminology. Focus on specific clauses, Article numbers, and exact wording from the documents. Maintain maximum professional detail.",
-        "de": "Verwende präzise juristische Terminologie. Konzentriere dich auf spezifische Klauseln, Artikelnummern und den exakten Wortlaut aus den Dokumenten. Maximiere die fachliche Detailtiefe."
+        "en": "MODE: EXPERT. You MUST use precise legal terminology. Visually break down the answer into structured bullet points. You MUST explicitly cite specific clauses, Article numbers, and exact wording from the context within your answer text. Give a detailed answer with a mix of paragraphs and bullet points.",
+        "de": "MODE: EXPERT. Du MUSST präzise juristische Terminologie verwenden. Gliedere die Antwort visuell in strukturierte Aufzählungspunkte. Du MUSST explizit spezifische Klauseln, Artikelnummern und exakte Formulierungen aus dem Kontext innerhalb deines Antworttextes zitieren. Gib eine detaillierte Antwort mit einer Mischung aus Absätzen und Aufzählungspunkten."
     }
 }
 
 PROMPTS = {
     "en": {
-        "system": """You are the official DEW21 Energy Assistant. 
-        INSTRUCTIONS:
-        1. Answer ONLY based on the provided context. Do NOT use outside information.
-        2. {mode_instruction}
-        3. Be extremely thorough: if a detail (dates, years, names) is in the context, find it and report it.
-        4. Citations required: \nSources: [FileName]
-        5. If the question is a greeting, answer naturally without mentioning context.""",
-        "context_lbl": "📄 CONTEXT:", "hist_lbl": "💬 HISTORY:", "q_lbl": "❓ QUESTION:", "a_lbl": "🤖 ANSWER:"
+        "system": """You are the official DEW21 Energy Assistant.
+
+YOUR TONE AND FORMATTING MODE:
+{mode_instruction}
+
+STRICT GROUNDING RULES — FOLLOW THESE EXACTLY:
+1. Use ONLY information that is explicitly found in the CONTEXT below.
+2. Do NOT add fabricated examples, comparisons, or factual details beyond what the context states.
+3. You may rephrase the text to match your assigned MODE, but you must NOT introduce new factual meaning or implications.
+4. Every fact in your answer MUST be directly traceable to a specific passage in the context.
+5. NEVER use your training knowledge to fill factual gaps.
+6. If the context contains ANY information related to the question (even abstract rights like BGB or GDPR), you MUST provide that information instead of refusing.
+7. If the context is broadly unrelated to the specific question, do NOT extract entirely unrelated rules. Briefly summarize whatever closely matches the topic, noting the exact answer is absent.
+8. If the user asks for "the company's" contact details or "SC" company, ALWAYS provide the details for both DEW21 AND the dispute resolution body (Schlichtungsstelle Energie e. V.).
+9. End your final output exactly with: Sources: [list the document filenames used]
+10. If the question is a greeting, respond naturally without referencing documents."""
     },
     "de": {
-        "system": """Du bist der DEW21 Energie-Assistent. 
-        ANWEISUNGEN:
-        1. Antworte NUR basierend auf dem KONTEXT. Kein externes Wissen.
-        2. {mode_instruction}
-        3. Sei gründlich: Suche nach Details (Daten, Jahre, Namen).
-        4. Quellenangabe: \nQuellen: [Dateiname]
-        5. Bei Begrüßungen antworte natürlich ohne den Kontext zu erwähnen.""",
-        "context_lbl": "📄 KONTEXT:", "hist_lbl": "💬 VERLAUF:", "q_lbl": "❓ FRAGE:", "a_lbl": "🤖 ANTWORT:"
+        "system": """Du bist der offizielle DEW21 Energie-Assistent.
+
+DEINE TON- UND FORMATIERUNGSANWEISUNGEN:
+{mode_instruction}
+
+STRIKTE GRUNDIERUNGSREGELN — BEFOLGE DIESE GENAU:
+1. Verwende NUR Informationen, die explizit im KONTEXT unten stehen.
+2. Füge KEINE erfundenen Beispiele, Vergleiche oder faktischen Details hinzu.
+3. Du darfst den Text umformulieren, um deinem MODUS zu entsprechen, darfst aber KEINE neuen sachlichen Implikationen einführen.
+4. Jede Tatsache in deiner Antwort MUSS direkt auf eine bestimmte Stelle im Kontext zurückführbar sein.
+5. Verwende NIEMALS dein Trainingswissen, um faktische Lücken zu füllen.
+6. Wenn der Kontext IRGENDWELCHE Informationen enthält, die mit der Frage zusammenhängen, MUSST du diese bereitstellen, anstatt abzulehnen.
+7. Wenn der Kontext weitgehend unabhängig von der spezifischen Frage ist, extrahiere KEINE völlig unzusammenhängenden Regeln. Fasse kurz das Thema zusammen und merke an, dass die genaue Antwort fehlt.
+8. Wenn nach Kontaktdaten gefragt wird, gib IMMER die Daten sowohl für DEW21 ALS AUCH für die Schlichtungsstelle Energie e. V. an.
+9. Beende deine endgültige Antwort exakt mit: Quellen: [verwendete Dateinamen]
+10. Bei Begrüßungen antworte natürlich ohne Dokumente zu erwähnen."""
     }
 }
 
@@ -155,16 +239,30 @@ async def _aanalyze_query(llm, question: str, chat_history: list, lang: str = "e
     followup_starters = ["what about", "how about", "why", "and", "give me more", "explain", "why?", "example"]
     is_followup = any(question.lower().startswith(s) for s in followup_starters) or len(q_words) < 3
 
-    if not is_followup and not (" and " in question.lower()):
+    complexity_triggers = [" and ", " vs ", " vs. ", " or ", "compare", "difference", "both", "between"]
+    is_complex = any(trigger in question.lower() for trigger in complexity_triggers)
+
+    # Manual intercept for user commonly asking for the "sc something" company
+    if "sc something" in question.lower() or ("contact" in question.lower() and "sc" in question.lower()):
+        return {"query": question, "sub_queries": [question, "Schlichtungsstelle Energie e. V."]}
+
+    if not is_followup and not is_complex:
         return {"query": question, "sub_queries": [question]}
 
     # 3. LLM ANALYSIS (Only for complex entries)
+    ctx_str = "Initial Query"
+    if len(chat_history) >= 2:
+        ctx_str = f"User asked: {chat_history[-2]['content'][:150]} | Assistant answered: {chat_history[-1]['content'][:150]}"
+    elif len(chat_history) == 1:
+        ctx_str = f"User asked: {chat_history[-1]['content'][:150]}"
+
     prompt = (
         f"You are a search query optimizer for a DEW21 Energy Assistant RAG system.\n"
         f"Decompose the user question into a standalone version and distinct sub-queries targeting different parts of our documentation (e.g., GTC, billing, data protection, liability).\n"
+        f"If the question compares two subjects (e.g., 'Compare Electricity vs Gas rights'), your sub_queries must uniquely split them (e.g., ['Electricity rights', 'Gas rights']).\n"
         f"Language: {lang}\n"
         f"User Question: {question}\n"
-        f"Context: {chat_history[-1]['content'][:200] if chat_history else 'Initial Query'}\n\n"
+        f"Context: {ctx_str}\n\n"
         'Output strictly in valid JSON format:\n'
         '{"query": "Refined standalone question", "sub_queries": ["specific search term 1", "specific search term 2"]}'
     )
@@ -181,7 +279,7 @@ import asyncio
 import threading
 import queue
 
-async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None):
+async def _aask_stream(question: str, chat_history: list[dict[str, Any]] | None = None, lang: str = "en", retrieved_docs_out: list[Any] | None = None, mode: str = "Standard", doc_filter: str | None = None):
     """Aggressively optimized streaming for instant feedback with mode & filter support."""
     if chat_history is None: chat_history = []
     
@@ -196,18 +294,21 @@ async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_ou
     
     analysis = await analysis_task
     # Filter out the main question to avoid duplicate searching
-    sub_queries = [sq for sq in analysis.get("sub_queries", [question]) if sq.lower() != question.lower()][:3]
+    raw_sub_queries = [sq for sq in analysis.get("sub_queries", [question]) if sq.lower() != question.lower()]
+    sub_queries = [raw_sub_queries[i] for i in range(min(3, len(raw_sub_queries)))]
     
-    extra_retrievals = []
+    extra_retrievals: list[list[Any]] = []
     if sub_queries:
-        extra_retrievals = await asyncio.gather(*[
+        extra_retrievals_raw = await asyncio.gather(*[
             ahybrid_retrieve(q, lang=lang, doc_filter=doc_filter) for q in sub_queries
         ])
+        extra_retrievals = list(extra_retrievals_raw)  # type: ignore
         
-    base_docs = await base_retrieval_task
+    base_docs: list[Any] = await base_retrieval_task  # type: ignore
     
-    # ROUND-ROBIN MERGE: Ensure sub-queries aren't drowned out by the base query
-    all_docs = []
+    # ROUND-ROBIN MERGE with SOURCE DIVERSITY: Ensure sub-queries and
+    # different document sources aren't drowned out by a single dominant doc.
+    all_docs: list[Any] = []
     seen = set()
     
     # Interleave results: 1st from base, 1st from each sub-query, then 2nd...
@@ -228,13 +329,30 @@ async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_ou
                     seen.add(d.page_content)
                     all_docs.append(d)
     
-    docs = all_docs[:15] # Increased to 15 for maximum coverage during presentation
+    # SOURCE DIVERSITY: Ensure we don't have >10 chunks from the same source
+    # This prevents a single large doc from monopolizing the context window
+    source_counts = {}
+    diverse_docs = []
+    overflow_docs = []
+    MAX_PER_SOURCE = 8
     
-    if retrieved_docs_out is not None:
+    for d in all_docs:
+        src = d.metadata.get("source", "unknown")
+        source_counts[src] = source_counts.get(src, 0) + 1
+        if source_counts[src] <= MAX_PER_SOURCE:
+            diverse_docs.append(d)
+        else:
+            overflow_docs.append(d)
+    
+    # Fill remaining slots with overflow if we have room
+    combined = diverse_docs + overflow_docs
+    docs = [combined[i] for i in range(min(15, len(combined)))]
+    
+    if isinstance(retrieved_docs_out, list):
         retrieved_docs_out.extend(docs)
         
     if not docs:
-        yield "I'm sorry, no records found. Contact 0231 22 22 22 11."
+        yield "I'm sorry, no records found."
         return
 
     # 2. PROMPT CONSTRUCTION WITH MODE
@@ -243,9 +361,10 @@ async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_ou
     
     ctx = "\n\n".join([f"[{d.metadata.get('source', 'Doc')}]\n{d.page_content}" for d in docs])
     hist = ""
-    if chat_history:
-        # Mini-history for context
-        hist = f"User: {chat_history[-1]['content'][:150]}\nAssistant: {chat_history[-1]['content'][:150]}"
+    if len(chat_history) >= 2:
+        hist = f"User: {chat_history[-2]['content'][:150]}\nAssistant: {chat_history[-1]['content'][:150]}"
+    elif len(chat_history) == 1:
+        hist = f"User: {chat_history[-1]['content'][:150]}"
 
     prompt = (
         f"{sys_prompt}\n\n{ctx}\n\nHistory: {hist}\nQuestion: {question}\nAnswer:"
@@ -260,7 +379,7 @@ async def _aask_stream(question, chat_history=None, lang="en", retrieved_docs_ou
 
 def ask_stream(question, chat_history=None, lang="en", retrieved_docs_out=None, mode="Standard", doc_filter=None):
     """Synchronous generator wrapper using threading and Queue to stream to Streamlit."""
-    q = queue.Queue()
+    q: queue.Queue[Any] = queue.Queue()
     
     def _run_async():
         async def exhaust():
@@ -285,5 +404,6 @@ def ask(question, chat_history=None, lang="en"):
     """Static version using the same logic."""
     full_answer = ""
     for chunk in ask_stream(question, chat_history, lang):
-        full_answer += chunk
+        if chunk is not None:
+            full_answer += str(chunk)
     return {"answer": full_answer, "contexts": [], "sources": [], "highlights": []}

@@ -4,6 +4,11 @@ An advanced Retrieval-Augmented Generation (RAG) system designed for the energy 
 
 ---
 
+### 📜 Project Background
+This project was developed as part of **The BIP: GenAI meets Reality** programme, organized by **Fachhochschule Dortmund (University of Applied Sciences and Arts)**. All data and use cases were provided by **DEW21** to explore the intersection of Generative AI and the energy industry.
+
+---
+
 ## 🏗️ System Architecture: The 7-Phase Intelligence Pipeline
 
 The system is built on a sophisticated asynchronous pipeline that ensures speed, accuracy, and source diversity.

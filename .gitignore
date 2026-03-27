@@ -45,3 +45,13 @@ test_db/
 # Temp files
 *.pdf
 *.csv
+
+# Data and Sensitive folders
+data/
+data_de/
+chat_history/
+*.xlsx
+*.xls
+*.json
+!pyrightconfig.json
+!manifest.json
